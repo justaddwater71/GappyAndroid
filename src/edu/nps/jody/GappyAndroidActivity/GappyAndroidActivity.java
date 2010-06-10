@@ -2,6 +2,8 @@ package edu.nps.jody.GappyAndroidActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,5 +21,28 @@ public class GappyAndroidActivity extends Activity
         TextView	file		= (TextView)findViewById(R.id.file);
         Button		fileGo		= (Button)findViewById(R.id.fileGo);
         TextView	fileView	= (TextView)findViewById(R.id.fileView);
+        
+        pathGo.setOnClickListener(onPathGoClick);
+        fileGo.setOnClickListener(onFileGoClick);
     }
+    
+    private Button.OnClickListener onPathGoClick = new OnClickListener()
+    {
+		public void onClick(View arg0) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    };
+    
+    private Button.OnClickListener onFileGoClick = new OnClickListener()
+    {
+		public void onClick(View v) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    };
 }
