@@ -4,8 +4,47 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-	<TextView  
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-    />
+    
+    <RelativeLayout
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    >
+		<TextView  
+			android:id="@+id/path"
+		    android:layout_width="85sp" 
+		    android:layout_height="wrap_content"
+		    android:background="#ff000000" 
+	    />
+	    <Button
+	    	android:id="@+id/pathGo"
+	    	android:layout_width="15sp"
+	    	android:layout_height="wrap_content"
+	    />
+	</RelativeLayout>
+	
+	<RelativeLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+	>
+		<TextView  
+			android:id="@+id/file"
+		    android:layout_width="85sp" 
+		    android:layout_height="wrap_content"
+		    android:background="#ff000000" 
+	    />
+	    <Button
+	    	android:id="@+id/fileGo"
+	    	android:layout_width="15sp"
+	    	android:layout_height="wrap_content"
+	    />
+	</RelativeLayout>
+	
+	<TextView
+		android:id="@+id/fileView"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="#ff000000"
+	/>
 </LinearLayout>
