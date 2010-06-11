@@ -50,26 +50,6 @@ public class GappyAndroidActivity extends Activity
         super.onCreate(savedInstanceState);
         
         mainView();
-        
-        /*setContentView(R.layout.main);
-        
-        					path		= (EditText)findViewById(R.id.path);
-        Button		pathGo		= (Button)findViewById(R.id.pathGo);
-        Button		pathBrowse	= (Button)findViewById(R.id.pathBrowse);
-
-        					file		= (EditText)findViewById(R.id.file);
-        Button		fileGo		= (Button)findViewById(R.id.fileGo);
-        Button		fileBrowse	= (Button)findViewById(R.id.fileBrowse);
-        
-        					fileView	= (TextView)findViewById(R.id.fileView);
-        
-        path.setText(filePath);
-        pathGo.setOnClickListener(onPathGoClick);
-        pathBrowse.setOnClickListener(onPathBrowse);
-        
-        file.setText(fileName);
-        fileGo.setOnClickListener(onFileGoClick);
-        fileBrowse.setOnClickListener(onFileBrowse);*/
     }
     
     //Methods
@@ -414,6 +394,11 @@ public class GappyAndroidActivity extends Activity
 					{
 						fileContents.concat(currentLine);
 					}
+					
+					path.setText(currentDirectory.getAbsolutePath());
+					filePath=currentDirectory.getAbsolutePath();
+					
+					mainView();
 					
 				} 
 				catch (FileNotFoundException e) 
