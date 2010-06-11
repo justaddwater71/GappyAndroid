@@ -24,14 +24,14 @@ public class GappyAndroidActivity extends Activity
 {
 	//Data Members
 		//GappyAndroid
-		String filePath = "/";
-		String fileName = "";
-		EditText path;
-		EditText file;
+		String		 filePath = "/";
+		String		 fileName = "";
+		EditText 	path;
+		EditText	 file;
 		TextView fileView;
 		
 		//guiBrowse
-		File currentDirectory = new File("/proc");
+		File 			currentDirectory = new File("/proc");
 		ListView listView;
 		TextView browsePath;
 	
@@ -41,17 +41,20 @@ public class GappyAndroidActivity extends Activity
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
         
-        			path		= (EditText)findViewById(R.id.path);
+        mainView();
+        
+        /*setContentView(R.layout.main);
+        
+        					path		= (EditText)findViewById(R.id.path);
         Button		pathGo		= (Button)findViewById(R.id.pathGo);
         Button		pathBrowse	= (Button)findViewById(R.id.pathBrowse);
 
-        			file		= (EditText)findViewById(R.id.file);
+        					file		= (EditText)findViewById(R.id.file);
         Button		fileGo		= (Button)findViewById(R.id.fileGo);
         Button		fileBrowse	= (Button)findViewById(R.id.fileBrowse);
         
-        			fileView	= (TextView)findViewById(R.id.fileView);
+        					fileView	= (TextView)findViewById(R.id.fileView);
         
         path.setText(filePath);
         pathGo.setOnClickListener(onPathGoClick);
@@ -59,10 +62,33 @@ public class GappyAndroidActivity extends Activity
         
         file.setText(fileName);
         fileGo.setOnClickListener(onFileGoClick);
-        fileBrowse.setOnClickListener(onFileBrowse);
+        fileBrowse.setOnClickListener(onFileBrowse);*/
     }
     
     //Methods
+    private void mainView()
+    {
+        setContentView(R.layout.main);
+        
+		path		= (EditText)findViewById(R.id.path);
+Button		pathGo		= (Button)findViewById(R.id.pathGo);
+Button		pathBrowse	= (Button)findViewById(R.id.pathBrowse);
+
+		file		= (EditText)findViewById(R.id.file);
+Button		fileGo		= (Button)findViewById(R.id.fileGo);
+Button		fileBrowse	= (Button)findViewById(R.id.fileBrowse);
+
+		fileView	= (TextView)findViewById(R.id.fileView);
+
+path.setText(filePath);
+pathGo.setOnClickListener(onPathGoClick);
+pathBrowse.setOnClickListener(onPathBrowse);
+
+file.setText(fileName);
+fileGo.setOnClickListener(onFileGoClick);
+fileBrowse.setOnClickListener(onFileBrowse);
+    }
+    
     private Button.OnClickListener onPathBrowse = new Button.OnClickListener()
     {
 
@@ -139,12 +165,14 @@ public class GappyAndroidActivity extends Activity
             
             listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, fileNames));
             
-            listView.setOnItemClickListener(OnListClick);
+            listView.setOnItemClickListener(onListClick);
             
             //If the user needs to go "up" the directory, here is the button to do it
             Button up = (Button)findViewById(R.id.up);
+            Button select = (Button)findViewById(R.id.select);
             
-            up.setOnClickListener(OnUpClick);
+            up.setOnClickListener(onUpClick);
+            select.setOnClickListener(onSelectClick);
             
             //Keep updating the address location
             browsePath = (TextView)findViewById(R.id.browsePath);
@@ -152,12 +180,24 @@ public class GappyAndroidActivity extends Activity
             
     }
     
- //Ensure current directory has a parent, if it does, browseTo it
-    
-    //TODO THINK THIS SHOULD BE BUTTON.ONCLICKLISTENER, NOT VIEW. -- NEED TO TEST
-    private View.OnClickListener OnUpClick = new View.OnClickListener()
+    private Button.OnClickListener onSelectClick = new Button.OnClickListener()
     {
 
+		public void onClick(View v) 
+		{
+			path.setText(currentDirectory.getAbsolutePath());
+			filePath=currentDirectory.getAbsolutePath();
+			
+			mainView();
+			
+		}
+    	
+    };
+    
+    
+ //Ensure current directory has a parent, if it does, browseTo it
+    private View.OnClickListener onUpClick = new View.OnClickListener()
+    {
 		//@Override
 		public void onClick(View v) 
 		{
@@ -192,7 +232,7 @@ public class GappyAndroidActivity extends Activity
     };
     
 
-	private OnItemClickListener OnListClick = new OnItemClickListener()
+	private OnItemClickListener onListClick = new OnItemClickListener()
 	{
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 		{
