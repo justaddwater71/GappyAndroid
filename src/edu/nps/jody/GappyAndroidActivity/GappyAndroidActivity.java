@@ -2,6 +2,7 @@ package edu.nps.jody.GappyAndroidActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,52 +27,63 @@ public class GappyAndroidActivity extends Activity
         setContentView(R.layout.main);
         
         			path		= (EditText)findViewById(R.id.path);
-        path.setText(filePath);
         Button		pathGo		= (Button)findViewById(R.id.pathGo);
+        Button		pathBrowse	= (Button)findViewById(R.id.pathBrowse);
+
         			file		= (EditText)findViewById(R.id.file);
-        file.setText(fileName);
         Button		fileGo		= (Button)findViewById(R.id.fileGo);
+        Button		fileBrowse	= (Button)findViewById(R.id.fileBrowse);
+        
         			fileView	= (TextView)findViewById(R.id.fileView);
-        /*
-        path.setOnClickListener(onPathClick);
-        file.setOnClickListener(onFileClick);
-        */
+        
+        path.setText(filePath);
         pathGo.setOnClickListener(onPathGoClick);
+        pathBrowse.setOnClickListener(onPathBrowse);
+        
+        file.setText(fileName);
         fileGo.setOnClickListener(onFileGoClick);
+        fileBrowse.setOnClickListener(onFileBrowse);
     }
-    /*
-    private TextView.OnClickListener onPathClick = new OnClickListener()
+    
+    private Button.OnClickListener onPathBrowse = new OnClickListener()
+    {
+
+		public void onClick(View view) 
+		{
+			Context context = getBaseContext();
+			
+			Intent intent = new Intent(context, FileBrowser.class);
+			
+			startActivityForResult(intent, Activity);
+			
+		}
+    	
+    };
+    
+    private Button.OnClickListener onFileBrowse = new OnClickListener()
     {
 
 		public void onClick(View v) 
 		{
-			path.
+			Context context = getBaseContext();
+			
+			Intent intent = new Intent(context, FileBrowser.class);
+			
+			context.startActivity(intent);
 			
 		}
-    
+    	
     };
-    
-    private TextView.OnClickListener onFileClick = new OnClickListener()
-    {
-
-		public void onClick(View v) 
-		{
-			
-		}
-    
-    };
-    	*/
+ 
     private Button.OnClickListener onPathGoClick = new OnClickListener()
     {
 		public void onClick(View v) 
 		{	
-			//TextView temp = (TextView)path.getText();
 			filePath = path.getText().toString();
 			fileName = file.getText().toString();
 			path.getContext();
-			//Toast.makeText(fileView.getContext(), filePath + fileName, Toast.LENGTH_LONG);
-			/*
-			 * Below hide-keyboard code copied from
+			
+			/* Below hide-keyboard code copied from
 			 * http://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard
 			 */
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -87,11 +99,9 @@ public class GappyAndroidActivity extends Activity
     {
 		public void onClick(View v) 
 		{
-			//TextView temp = (TextView)file.getText();
 			filePath = path.getText().toString();
 			fileName = file.getText().toString();
 			file.getContext();
-			//Toast.makeText(fileView.getContext(), filePath + fileName, Toast.LENGTH_LONG);
 			
 			/*
 			 * Below hide-keyboard code copied from
@@ -105,6 +115,5 @@ public class GappyAndroidActivity extends Activity
 		}
     	
     };
-    
     
 }

@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class LayoutTest extends Activity {
+public class FileBrowser extends Activity {
     //Data Members
 	File currentDirectory = new File("/proc");
 	ListView listView;
@@ -27,7 +27,7 @@ public class LayoutTest extends Activity {
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.browser);
         
         //Create a list view, populate it with an array of files, display the view and listen for click
         listView = (ListView)findViewById(R.id.listView);
@@ -52,6 +52,7 @@ public class LayoutTest extends Activity {
     }
     
     //Ensure current directory has a parent, if it does, browseTo it
+    //THINK THIS SHOULD BE BUTTON.ONCLICKLISTENER, NOT VIEW. -- NEED TO TEST
     private View.OnClickListener OnUpClick = new View.OnClickListener()
     {
 
@@ -84,13 +85,11 @@ public class LayoutTest extends Activity {
 				listView.setAdapter(new ArrayAdapter<String>(listView.getContext(), R.layout.file_row, dropPath(dotDot.listFiles())));
 			}
 
-			
 		}
 
-    	
     };
     
-    //This should be something built-in.  I think I'm working too hard on this action.
+
 	private OnItemClickListener OnListClick = new OnItemClickListener()
 	{
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -112,7 +111,7 @@ public class LayoutTest extends Activity {
 			if (tempFile.canRead())
 			{
 				File[] files = tempFile.listFiles();
-				currentDirectory = tempFile;//(File)listView.getItemAtPosition(position);
+				currentDirectory = tempFile;
 				path.setText(currentDirectory.getAbsolutePath());
 				
 				if (files == null)
@@ -174,10 +173,4 @@ public class LayoutTest extends Activity {
 		return fileOnly;
 	}
 	
-/*    private File[] lsDirectory (String path)
-    {
-    	File[] files = new File(path).listFiles();
-    	
-    	return files;
-    }*/
 }
