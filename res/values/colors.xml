@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="textview_color">#ffffffff</color>
+    <color name="textview_text_color">#ff000000</color>
+</resources>
