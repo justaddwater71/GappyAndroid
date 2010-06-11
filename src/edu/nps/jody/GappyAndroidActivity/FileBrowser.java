@@ -19,7 +19,7 @@ public class FileBrowser extends Activity {
     //Data Members
 	File currentDirectory = new File("/proc");
 	ListView listView;
-	TextView path;
+	TextView browsePath;
 	
 	
 	//Constructor
@@ -46,13 +46,14 @@ public class FileBrowser extends Activity {
         up.setOnClickListener(OnUpClick);
         
         //Keep updating the address location
-        path = (TextView)findViewById(R.id.path);
-        path.setText("/proc");
+        browsePath = (TextView)findViewById(R.id.browsePath);
+        browsePath.setText("/proc");
         
     }
     
     //Ensure current directory has a parent, if it does, browseTo it
-    //THINK THIS SHOULD BE BUTTON.ONCLICKLISTENER, NOT VIEW. -- NEED TO TEST
+    
+    //TODO THINK THIS SHOULD BE BUTTON.ONCLICKLISTENER, NOT VIEW. -- NEED TO TEST
     private View.OnClickListener OnUpClick = new View.OnClickListener()
     {
 
@@ -81,7 +82,7 @@ public class FileBrowser extends Activity {
 			else
 			{
 				currentDirectory = dotDot;
-				path.setText(currentDirectory.getAbsolutePath());
+				browsePath.setText(currentDirectory.getAbsolutePath());
 				listView.setAdapter(new ArrayAdapter<String>(listView.getContext(), R.layout.file_row, dropPath(dotDot.listFiles())));
 			}
 
@@ -112,7 +113,7 @@ public class FileBrowser extends Activity {
 			{
 				File[] files = tempFile.listFiles();
 				currentDirectory = tempFile;
-				path.setText(currentDirectory.getAbsolutePath());
+				browsePath.setText(currentDirectory.getAbsolutePath());
 				
 				if (files == null)
 				{

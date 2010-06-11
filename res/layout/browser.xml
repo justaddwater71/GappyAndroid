@@ -14,7 +14,7 @@
 			android:background="@color/list_background"
 		>
 			<TextView
-				android:id="@+id/path"
+				android:id="@+id/browsePath"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="0.85"
@@ -30,7 +30,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="3sp"
-				android:layout_toRightOf="@id/path"
+				android:layout_toRightOf="@id/browsePath"
 				android:text="Up"
 				android:textStyle="bold"
 			/>
