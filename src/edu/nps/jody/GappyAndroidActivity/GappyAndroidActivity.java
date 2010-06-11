@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GappyAndroidActivity extends Activity 
 {
@@ -71,8 +70,14 @@ public class GappyAndroidActivity extends Activity
 			fileName = file.getText().toString();
 			path.getContext();
 			//Toast.makeText(fileView.getContext(), filePath + fileName, Toast.LENGTH_LONG);
+			/*
+			 * Below hide-keyboard code copied from
+			 * http://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard
+			 */
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(path.getApplicationWindowToken(), 0);
+            //End copy from stackoverflow
+            
 			fileView.setText(filePath + "/" + fileName);
 		}
     	
@@ -87,10 +92,19 @@ public class GappyAndroidActivity extends Activity
 			fileName = file.getText().toString();
 			file.getContext();
 			//Toast.makeText(fileView.getContext(), filePath + fileName, Toast.LENGTH_LONG);
+			
+			/*
+			 * Below hide-keyboard code copied from
+			 * http://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard
+			 */
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(file.getApplicationWindowToken(), 0);
+            //End copy from stackoverflow
+            
 			fileView.setText(filePath + "/" + fileName);
 		}
     	
     };
+    
+    
 }

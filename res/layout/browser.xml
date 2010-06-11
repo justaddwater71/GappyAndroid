@@ -3,72 +3,67 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
+	android:background="@color/list_background"
 >
-	<FrameLayout
-		android:orientation="vertical"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+			
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/list_background"
 		>
-			<LinearLayout
-				android:orientation="vertical"
+			<TextView
+				android:id="@+id/path"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.85"
+				android:padding="7sp"
+				android:gravity="center_vertical"
+				android:layout_margin="3sp"
+				android:textColor="@color/address_text"
+				android:background="@color/address_background"
+			/>
+
+			<Button
+				android:id="@+id/up"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="3sp"
+				android:layout_toRightOf="@id/path"
+				android:text="Up"
+				android:textStyle="bold"
+			/>
+		</LinearLayout>
+			
+			
+		<RelativeLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:background="@color/list_background"
+		>
+
+			<Button
+				android:id="@+id/select"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="Select"
+				android:textStyle="bold"
+				android:layout_alignParentBottom="true"
+				android:layout_marginTop="5sp"
+			/>
+			
+			<ListView
+				android:id="@+id/listView"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
-				android:background="@color/list_background"
-			>
+				android:divider="@color/list_background"
+				android:background="@color/address_background"
+				android:cacheColorHint="@color/address_background"
+				android:layout_alignParentTop="true"
+				android:layout_above="@id/select"
+			/>
 			
-				<RelativeLayout
-					android:orientation="horizontal"
-					android:layout_width="fill_parent"
-					android:layout_height="40sp"
-					android:background="@color/address_background"
-					
-				>
-					<TextView
-						android:id="@+id/path"
-						android:layout_width="270sp"
-						android:layout_height="35sp"
-						android:paddingTop="10sp"
-						android:paddingLeft="7sp"
-						android:layout_alignParentLeft="true"
-						android:textColor="@color/address_text"
-						android:background="@color/address_background"
-					/>
-					<Button
-						android:id="@+id/up"
-						android:layout_width="wrap_content"
-						android:layout_height="fill_parent"
-						android:layout_marginTop="3sp"
-						android:layout_alignParentRight="true"
-						android:textSize="15sp"
-						android:text="Up"
-					/>
-				</RelativeLayout>
-			
-			
-				<ListView
-					android:id="@+id/listView"
-					android:layout_width="fill_parent"
-					android:layout_height="340sp"
-					android:divider="@color/list_background"
-					android:background="@color/list_background"
-					android:cacheColorHint="@color/list_background"
-				/>
-			
-			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:background="@color/list_background"
-			>
-				<Button
-					android:id="@+id/select"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"
-					android:layout_alignParentBottom="true"
-					android:text="Select"
-				/>
-			</LinearLayout>
-			
-			</LinearLayout>
-		</FrameLayout>
+		</RelativeLayout>
+
 </LinearLayout>
