@@ -1,6 +1,7 @@
 package edu.nps.jody.GappyAndroidActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,8 +69,9 @@ public class GappyAndroidActivity extends Activity
 			//TextView temp = (TextView)path.getText();
 			filePath = path.getText().toString();
 			fileName = file.getText().toString();
+			path.getContext();
 			//Toast.makeText(fileView.getContext(), filePath + fileName, Toast.LENGTH_LONG);
-			InputMethodManager imm = (InputMethodManager) getSystemService(path.getContext().INPUT_METHOD_SERVICE);
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(path.getApplicationWindowToken(), 0);
 			fileView.setText(filePath + "/" + fileName);
 		}
@@ -83,8 +85,9 @@ public class GappyAndroidActivity extends Activity
 			//TextView temp = (TextView)file.getText();
 			filePath = path.getText().toString();
 			fileName = file.getText().toString();
+			file.getContext();
 			//Toast.makeText(fileView.getContext(), filePath + fileName, Toast.LENGTH_LONG);
-			InputMethodManager imm = (InputMethodManager) getSystemService(file.getContext().INPUT_METHOD_SERVICE);
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(file.getApplicationWindowToken(), 0);
 			fileView.setText(filePath + "/" + fileName);
 		}

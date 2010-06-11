@@ -3,4 +3,10 @@
 <resources>
     <color name="textview_color">#ffffffff</color>
     <color name="textview_text_color">#ff000000</color>
+    
+    <color name="address_background">#ffffffff</color>
+    <color name="address_text">#ff000000</color>
+    
+    <color name="list_background">#ff888888</color>
+    <color name="list_text">#ff000000</color>
 </resources>

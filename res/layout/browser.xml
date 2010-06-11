@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+>
+	<FrameLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		>
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:background="@color/list_background"
+			>
+			
+				<RelativeLayout
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="40sp"
+					android:background="@color/address_background"
+					
+				>
+					<TextView
+						android:id="@+id/path"
+						android:layout_width="270sp"
+						android:layout_height="35sp"
+						android:paddingTop="10sp"
+						android:paddingLeft="7sp"
+						android:layout_alignParentLeft="true"
+						android:textColor="@color/address_text"
+						android:background="@color/address_background"
+					/>
+					<Button
+						android:id="@+id/up"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:layout_marginTop="3sp"
+						android:layout_alignParentRight="true"
+						android:textSize="15sp"
+						android:text="Up"
+					/>
+				</RelativeLayout>
+			
+			
+				<ListView
+					android:id="@+id/listView"
+					android:layout_width="fill_parent"
+					android:layout_height="340sp"
+					android:divider="@color/list_background"
+					android:background="@color/list_background"
+					android:cacheColorHint="@color/list_background"
+				/>
+			
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:background="@color/list_background"
+			>
+				<Button
+					android:id="@+id/select"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:layout_alignParentBottom="true"
+					android:text="Select"
+				/>
+			</LinearLayout>
+			
+			</LinearLayout>
+		</FrameLayout>
+</LinearLayout>
