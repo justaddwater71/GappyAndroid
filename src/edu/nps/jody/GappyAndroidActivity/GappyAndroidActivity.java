@@ -174,6 +174,8 @@ public class GappyAndroidActivity extends Activity
 		{
 			path.setText(currentDirectory.getAbsolutePath());
 			filePath=currentDirectory.getAbsolutePath();
+			fileName="";
+			fileContents="";
 			
 			mainView();
 			
