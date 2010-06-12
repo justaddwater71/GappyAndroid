@@ -56,7 +56,6 @@ public class GappyAndroidActivity extends Activity
     private void mainView()
     {
     		setContentView(R.layout.main);
-			        
 					path		= (EditText)findViewById(R.id.path);
 			Button		pathGo		= (Button)findViewById(R.id.pathGo);
 			Button		pathBrowse	= (Button)findViewById(R.id.pathBrowse);
@@ -232,9 +231,9 @@ public class GappyAndroidActivity extends Activity
 	
 	private void browseTo(int position)
 	{	
-		String fileName = (String)listView.getItemAtPosition(position);
+		String localFileName = (String)listView.getItemAtPosition(position);
 		
-		File tempFile = new File(currentDirectory.getAbsolutePath() + "/" + fileName);
+		File tempFile = new File(currentDirectory.getAbsolutePath() + "/" + localFileName);
 		
 		if (tempFile.isDirectory())
 		{
@@ -324,11 +323,11 @@ public class GappyAndroidActivity extends Activity
 	
 	private void browseOpenTo(int position)
 	{	
-		String fileName = (String)listView.getItemAtPosition(position);
+		String localFileName = (String)listView.getItemAtPosition(position);
 		String currentLine ="";
 		
 		
-		File tempFile = new File(currentDirectory.getAbsolutePath() + "/" + fileName);
+		File tempFile = new File(currentDirectory.getAbsolutePath() + "/" + localFileName);
 		
 		if (tempFile.isDirectory())
 		{
@@ -367,22 +366,7 @@ public class GappyAndroidActivity extends Activity
 
 		}
 		else
-		{
-			/*OnClickListener fileButtonListener = new OnClickListener()
-			{
-				//@Override
-				public void onClick(DialogInterface arg0, int arg1) 
-				{
-					//Do nothing
-				}
-			};
-			
-			new AlertDialog.Builder(this)
-				.setTitle("File Selected!")
-				.setMessage("That is not a directory")
-				.setPositiveButton("OK", fileButtonListener)
-				.show();*/
-				
+		{	
 				try 
 				{
 					FileReader fileReader = new FileReader(tempFile);
@@ -392,12 +376,16 @@ public class GappyAndroidActivity extends Activity
 					
 					while ((currentLine = bufferedReader.readLine()) != null)
 					{
-						fileContents.concat(currentLine);
+						fileContents = fileContents.concat(currentLine);
 					}
 					
+					
+					//Update the fields for the main view
 					path.setText(currentDirectory.getAbsolutePath());
 					filePath=currentDirectory.getAbsolutePath();
+					fileName=tempFile.getName();
 					
+					//Go back to the mainview
 					mainView();
 					
 				} 

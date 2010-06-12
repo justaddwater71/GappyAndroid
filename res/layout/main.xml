@@ -98,6 +98,7 @@
 					android:id="@+id/fileView"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"
+					android:textColor="@color/textview_text_color"
 					android:background="#ffffffff"
 					android:layout_margin="3sp"
 					android:layout_weight="1.0"
