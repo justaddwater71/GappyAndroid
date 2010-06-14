@@ -32,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver
                 
                 try
                 {
-                SMS_Manager.processSMS(msgs[i] + " " + msgs[i], 4, "/sdcard");
+                SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, "/sdcard");
                 }
                 catch (IOException e)
                 {
