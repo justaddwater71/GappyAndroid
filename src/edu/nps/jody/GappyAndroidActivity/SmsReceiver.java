@@ -1,5 +1,7 @@
 package edu.nps.jody.GappyAndroidActivity;
 
+import java.io.IOException;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,10 +28,21 @@ public class SmsReceiver extends BroadcastReceiver
                 str += "SMS from " + msgs[i].getOriginatingAddress();                     
                 str += " :";
                 str += msgs[i].getMessageBody().toString();
-                str += "\n";        
+                str += "\n";      
+                
+                try
+                {
+                SMS_Manager.processSMS(msgs[i] + " " + msgs[i], 4, "/sdcard");
+                }
+                catch (IOException e)
+                {
+                	Toast.makeText(context, "That sucked", Toast.LENGTH_LONG).show();
+                }
             }
             //---display the new SMS message---
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+            
+            
         }                         
     }
 }
