@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>   
+<resources>
+    <string name="sms_receiver">sms_receiver</string>   
     <string name="app_name">Gappy Android Activity</string>
 </resources>

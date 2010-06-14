@@ -12,15 +12,21 @@
             </intent-filter>
         </activity>
 
-    <receiver
-    	android:name="SmsReceiver"
-   	>
-    	<intent-filter>
-    		<action
-    			android:name="android.provider.Telephony.SMS_RECEIVED"
-   			/>
-    	</intent-filter>
-    </receiver>
+    
+<receiver
+	 android:name="SmsReceiver" 
+	 android:enabled="true" 
+	 android:permission="android.permission.READ_SMS" 
+	 android:exported="true" 
+	 android:icon="@drawable/icon" 
+	 android:label="@string/sms_receiver"
+>
+	<intent-filter>
+		<action
+			android:name="android.provider.Telephony.SMS_RECEIVED"
+		/>
+	</intent-filter>
+</receiver>
 </application>
 
 
