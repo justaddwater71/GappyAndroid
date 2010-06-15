@@ -3,4 +3,6 @@
 <resources>
     <string name="sms_receiver">sms_receiver</string>   
     <string name="app_name">Gappy Android Activity</string>
+	<string name="ACTION_UPDATE_PATH">ACTION_UPDATE_PATH</string>
 </resources>
+

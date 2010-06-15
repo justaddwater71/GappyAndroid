@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
@@ -65,6 +66,7 @@ public class GappyAndroidActivity extends Activity
 					fileView	= (TextView)findViewById(R.id.fileView);
 			
 			path.setText(filePath);
+			updateReceiver();
 			pathGo.setOnClickListener(onPathGoClick);
 			pathBrowse.setOnClickListener(onPathBrowse);
 			
@@ -82,6 +84,7 @@ public class GappyAndroidActivity extends Activity
 		{
 			//Launch FileBrowser as another view vice a new Activity, pass parameter to only allow directories
 			filePath = path.getText().toString();
+			updateReceiver();
 			fileName = file.getText().toString();
 			hideKeyboard(view);
 			guiBrowse(false);
@@ -107,6 +110,7 @@ public class GappyAndroidActivity extends Activity
 		public void onClick(View v) 
 		{	
 			filePath = path.getText().toString();
+			updateReceiver();
 			fileName = file.getText().toString();
 			
 			hideKeyboard(path);
@@ -121,6 +125,7 @@ public class GappyAndroidActivity extends Activity
 		public void onClick(View v) 
 		{
 			filePath = path.getText().toString();
+			updateReceiver();
 			fileName = file.getText().toString();
 			
 			hideKeyboard(file);
@@ -172,6 +177,7 @@ public class GappyAndroidActivity extends Activity
 		{
 			path.setText(currentDirectory.getAbsolutePath());
 			filePath=currentDirectory.getAbsolutePath();
+			updateReceiver();
 			fileName="";
 			fileContents="";
 			
@@ -383,6 +389,7 @@ public class GappyAndroidActivity extends Activity
 					//Update the fields for the main view
 					path.setText(currentDirectory.getAbsolutePath());
 					filePath=currentDirectory.getAbsolutePath();
+					updateReceiver();//TODO Really need to make an updatePath method if the receiver thing works
 					fileName=tempFile.getName();
 					
 					//Go back to the mainview
@@ -425,6 +432,15 @@ public class GappyAndroidActivity extends Activity
 					.show();
 				}
 		}
+	}
+	
+	private void updateReceiver()
+	{
+		Intent pathUpdate = new Intent();
+		
+		pathUpdate.putExtra("ACTION_UPDATE_PATH", filePath);
+		
+		getBaseContext().sendBroadcast(pathUpdate);
 	}
 	
 }

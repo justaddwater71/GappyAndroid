@@ -11,6 +11,8 @@ import android.widget.Toast;
  
 public class SmsReceiver extends BroadcastReceiver
 {
+	String componentName;
+	
     @Override
     public void onReceive(Context context, Intent intent) 
     {
@@ -18,7 +20,7 @@ public class SmsReceiver extends BroadcastReceiver
         Bundle bundle = intent.getExtras();        
         SmsMessage[] msgs = null;
         String str = "";            
-        if (bundle != null)
+       if (bundle != null)
         {
             //---retrieve the SMS message received---
             Object[] pdus = (Object[]) bundle.get("pdus");
@@ -33,13 +35,17 @@ public class SmsReceiver extends BroadcastReceiver
                 try
                 {
                 SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, "/sdcard");
+                
                 }
                 catch (IOException e)
                 {
                 	Toast.makeText(context, "That sucked", Toast.LENGTH_LONG).show();
                 }
             }
+            
+           componentName =  intent.getComponent().toShortString();
             //---display the new SMS message---
+            Toast.makeText(context, componentName, Toast.LENGTH_LONG).show();
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
             
             

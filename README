@@ -6,3 +6,4 @@ GappyAndroid is a very simple Android app that attempts to:
 - Allow user to browse for path as well as directly type in path
 - Provide a very simple text viewer to look at OSB/GB files gathered
 - Show user rudimentary statistics such as number of SMS captured, size of capture files, etc.
+-Still working on updating the intents
