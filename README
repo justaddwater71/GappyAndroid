@@ -1,0 +1,8 @@
+GappyAndroid is a very simple Android app that attempts to:
+- Run a BroadcastReceiver in the background to capture all incoming SMS messages
+- Process those messages into orthogonal sparse bigrams (OSB) or gappy bigrams (GB) based on user defined settings
+- Allow user to define maximum gap for OSB/GB
+- Allow user to define location for all OSB/GB files to be kept
+- Allow user to browse for path as well as directly type in path
+- Provide a very simple text viewer to look at OSB/GB files gathered
+- Show user rudimentary statistics such as number of SMS captured, size of capture files, etc.

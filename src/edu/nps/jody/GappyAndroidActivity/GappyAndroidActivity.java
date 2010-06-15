@@ -376,7 +376,7 @@ public class GappyAndroidActivity extends Activity
 					
 					while ((currentLine = bufferedReader.readLine()) != null)
 					{
-						fileContents = fileContents.concat(currentLine + "/n");
+						fileContents = fileContents.concat(currentLine + "\n");
 					}
 					
 					
