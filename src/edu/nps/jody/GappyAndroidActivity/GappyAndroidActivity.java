@@ -40,7 +40,10 @@ public class GappyAndroidActivity extends Activity
 		File 			currentDirectory = new File(filePath);
 		ListView listView;
 		TextView browsePath;
-	
+		
+		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.GappyAndroidActivity.ACTION_UPDATE_PATH";
+		public static final String FILE_PATH = "FILE_PATH";
+		
 	//Constructors
     /** Called when the activity is first created. */
     @Override
@@ -438,7 +441,9 @@ public class GappyAndroidActivity extends Activity
 	{
 		Intent pathUpdate = new Intent();
 		
-		pathUpdate.putExtra("ACTION_UPDATE_PATH", filePath);
+		pathUpdate.setAction(ACTION_UPDATE_PATH);
+		
+		pathUpdate.putExtra(FILE_PATH, filePath);
 		
 		getBaseContext().sendBroadcast(pathUpdate);
 	}

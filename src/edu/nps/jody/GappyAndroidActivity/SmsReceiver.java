@@ -11,7 +11,8 @@ import android.widget.Toast;
  
 public class SmsReceiver extends BroadcastReceiver
 {
-	String componentName;
+	//String componentName;
+	String path = "";
 	
     @Override
     public void onReceive(Context context, Intent intent) 
@@ -22,6 +23,12 @@ public class SmsReceiver extends BroadcastReceiver
         String str = "";            
        if (bundle != null)
         {
+    	   if (intent.getAction() == "ACTION_UPDATE_PATH")
+    	   {
+    		   path = intent.getExtras().getString("FILE_PATH");
+    	   }
+    	   else
+    	   {
             //---retrieve the SMS message received---
             Object[] pdus = (Object[]) bundle.get("pdus");
             msgs = new SmsMessage[pdus.length];            
@@ -34,7 +41,7 @@ public class SmsReceiver extends BroadcastReceiver
                 
                 try
                 {
-                SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, "/sdcard");
+                SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, path);
                 
                 }
                 catch (IOException e)
@@ -43,12 +50,11 @@ public class SmsReceiver extends BroadcastReceiver
                 }
             }
             
-           componentName =  intent.getComponent().toShortString();
+           //componentName =  intent.getComponent().toShortString();
             //---display the new SMS message---
-            Toast.makeText(context, componentName, Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, componentName, Toast.LENGTH_LONG).show();
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-            
-            
+    	   }
         }                         
     }
 }

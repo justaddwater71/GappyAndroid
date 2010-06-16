@@ -24,11 +24,14 @@
 				<action
 					android:name="android.provider.Telephony.SMS_RECEIVED"
 				/>
-				<action
-					android:name="ACTION_UPDATE_PATH"
-				/>
+				
 			</intent-filter>
-					</receiver>
+					<intent-filter>
+						<action 
+							android:name="edu.nps.jody.GappyAndroidActivity.ACTION_UPDATE_PATH"
+						/>
+					</intent-filter>
+		</receiver>
 </application>
 
 
