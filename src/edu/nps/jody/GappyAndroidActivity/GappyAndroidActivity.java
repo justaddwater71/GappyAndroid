@@ -41,7 +41,7 @@ public class GappyAndroidActivity extends Activity
 		ListView listView;
 		TextView browsePath;
 		
-		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.GappyAndroidActivity.ACTION_UPDATE_PATH";
+		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
 		
 	//Constructors

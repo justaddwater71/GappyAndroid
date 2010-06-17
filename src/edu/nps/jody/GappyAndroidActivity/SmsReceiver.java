@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class SmsReceiver extends BroadcastReceiver
 {
 	//String componentName;
-	String path = "";
+	String path;
 	
     @Override
     public void onReceive(Context context, Intent intent) 
@@ -23,9 +23,9 @@ public class SmsReceiver extends BroadcastReceiver
         String str = "";            
        if (bundle != null)
         {
-    	   if (intent.getAction() == "ACTION_UPDATE_PATH")
+    	   if (intent.getAction().equals(GappyAndroidActivity.ACTION_UPDATE_PATH))    			   
     	   {
-    		   path = intent.getExtras().getString("FILE_PATH");
+    		   path = (String) bundle.get("FILE_PATH");
     	   }
     	   else
     	   {
@@ -57,4 +57,9 @@ public class SmsReceiver extends BroadcastReceiver
     	   }
         }                         
     }
+    
+	public String getPath()
+	{
+		return path;
+	}
 }
