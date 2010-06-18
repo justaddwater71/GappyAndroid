@@ -29,16 +29,17 @@ public class SmsReceiver extends BroadcastReceiver
             msgs = new SmsMessage[pdus.length];            
             for (int i=0; i<msgs.length; i++){
                 msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);                
-                str += "SMS from " + msgs[i].getOriginatingAddress();                     
-                str += " :";
+                str += msgs[i].getOriginatingAddress();                     
+                str += " ";
                 str += msgs[i].getMessageBody().toString();
                 str += "\n";      
                 
                 SharedPreferences pref = context.getSharedPreferences("preferenceFile", 0);
+                String path = pref.getString("filePath", "/");
                 
                 try
                 {
-                SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, pref.getString("FILE_PATH", "/"));
+                SMS_Manager.processSMS(str, 4, path);
                 }
                 catch (IOException e)
                 {

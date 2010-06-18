@@ -10,7 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+//import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
@@ -52,14 +52,17 @@ public class GappyAndroidActivity extends Activity
 		
 		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
-		SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
-		SharedPreferences.Editor editor = pref.edit();
+		SharedPreferences pref;
+		SharedPreferences.Editor editor;
 		
 	//Constructors
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
+    	pref = getSharedPreferences(PREF_FILE, 0);
+    	editor = pref.edit();
+    	
         super.onCreate(savedInstanceState);
         
         filePath = pref.getString(FILE_PATH, "/");
