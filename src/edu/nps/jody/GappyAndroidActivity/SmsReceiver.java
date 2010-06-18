@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
@@ -12,7 +13,7 @@ import android.widget.Toast;
 public class SmsReceiver extends BroadcastReceiver
 {
 	//String componentName;
-	String path;
+	//String path;
 	
     @Override
     public void onReceive(Context context, Intent intent) 
@@ -23,12 +24,6 @@ public class SmsReceiver extends BroadcastReceiver
         String str = "";            
        if (bundle != null)
         {
-    	   if (intent.getAction().equals(GappyAndroidActivity.ACTION_UPDATE_PATH))    			   
-    	   {
-    		   path = (String) bundle.get("FILE_PATH");
-    	   }
-    	   else
-    	   {
             //---retrieve the SMS message received---
             Object[] pdus = (Object[]) bundle.get("pdus");
             msgs = new SmsMessage[pdus.length];            
@@ -39,16 +34,16 @@ public class SmsReceiver extends BroadcastReceiver
                 str += msgs[i].getMessageBody().toString();
                 str += "\n";      
                 
+                SharedPreferences pref = context.getSharedPreferences("preferenceFile", 0);
+                
                 try
                 {
-                SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, path);
-                
+                SMS_Manager.processSMS(msgs[i].getOriginatingAddress() + " " + msgs[i].getMessageBody(), 4, pref.getString("FILE_PATH", "/"));
                 }
                 catch (IOException e)
                 {
                 	Toast.makeText(context, "That sucked", Toast.LENGTH_LONG).show();
                 }
-            }
             
            //componentName =  intent.getComponent().toShortString();
             //---display the new SMS message---
@@ -58,8 +53,8 @@ public class SmsReceiver extends BroadcastReceiver
         }                         
     }
     
-	public String getPath()
+/*	public String getPath()
 	{
 		return path;
-	}
+	}*/
 }

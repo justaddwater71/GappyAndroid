@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
@@ -26,8 +27,16 @@ import android.widget.AdapterView.OnItemClickListener;
 public class GappyAndroidActivity extends Activity 
 {
 	//Data Members
+		//Config file
+		final static String PREF_FILE = "preferenceFile";
+		final static String PATH = "filePath";
+		
+		
+	
 		//GappyAndroid
 		String		 filePath = "/";
+		
+		//PATH, filePath;
 		EditText 	path;
 		
 		String		 fileName = "";
@@ -43,6 +52,8 @@ public class GappyAndroidActivity extends Activity
 		
 		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
+		SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
+		SharedPreferences.Editor editor = pref.edit();
 		
 	//Constructors
     /** Called when the activity is first created. */
@@ -50,6 +61,8 @@ public class GappyAndroidActivity extends Activity
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        
+        filePath = pref.getString(FILE_PATH, "/");
         
         mainView();
     }
@@ -69,7 +82,7 @@ public class GappyAndroidActivity extends Activity
 					fileView	= (TextView)findViewById(R.id.fileView);
 			
 			path.setText(filePath);
-			updateReceiver();
+			//updateReceiver();
 			pathGo.setOnClickListener(onPathGoClick);
 			pathBrowse.setOnClickListener(onPathBrowse);
 			
@@ -87,7 +100,8 @@ public class GappyAndroidActivity extends Activity
 		{
 			//Launch FileBrowser as another view vice a new Activity, pass parameter to only allow directories
 			filePath = path.getText().toString();
-			updateReceiver();
+			editor.putString(PATH, filePath);
+			editor.commit();
 			fileName = file.getText().toString();
 			hideKeyboard(view);
 			guiBrowse(false);
@@ -113,7 +127,8 @@ public class GappyAndroidActivity extends Activity
 		public void onClick(View v) 
 		{	
 			filePath = path.getText().toString();
-			updateReceiver();
+			editor.putString(PATH, filePath);
+			editor.commit();
 			fileName = file.getText().toString();
 			
 			hideKeyboard(path);
@@ -128,7 +143,8 @@ public class GappyAndroidActivity extends Activity
 		public void onClick(View v) 
 		{
 			filePath = path.getText().toString();
-			updateReceiver();
+			editor.putString(PATH, filePath);
+			editor.commit();
 			fileName = file.getText().toString();
 			
 			hideKeyboard(file);
@@ -180,7 +196,8 @@ public class GappyAndroidActivity extends Activity
 		{
 			path.setText(currentDirectory.getAbsolutePath());
 			filePath=currentDirectory.getAbsolutePath();
-			updateReceiver();
+			editor.putString(PATH, filePath);
+			editor.commit();
 			fileName="";
 			fileContents="";
 			
@@ -392,7 +409,8 @@ public class GappyAndroidActivity extends Activity
 					//Update the fields for the main view
 					path.setText(currentDirectory.getAbsolutePath());
 					filePath=currentDirectory.getAbsolutePath();
-					updateReceiver();//TODO Really need to make an updatePath method if the receiver thing works
+					editor.putString(PATH, filePath);
+					editor.commit();//TODO Really need to make an updatePath method if the receiver thing works
 					fileName=tempFile.getName();
 					
 					//Go back to the mainview
@@ -437,7 +455,7 @@ public class GappyAndroidActivity extends Activity
 		}
 	}
 	
-	private void updateReceiver()
+/*	private void updateReceiver()
 	{
 		Intent pathUpdate = new Intent();
 		
@@ -446,6 +464,6 @@ public class GappyAndroidActivity extends Activity
 		pathUpdate.putExtra(FILE_PATH, filePath);
 		
 		getBaseContext().sendBroadcast(pathUpdate);
-	}
+	}*/
 	
 }
