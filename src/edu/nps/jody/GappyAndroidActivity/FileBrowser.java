@@ -30,7 +30,7 @@ public class FileBrowser extends Activity {
         setContentView(R.layout.browser);
         
         //Create a list view, populate it with an array of files, display the view and listen for click
-        listView = (ListView)findViewById(R.id.listView);
+        listView = (ListView)findViewById(R.id.list_view);
         
         File[] files= new File("/proc").listFiles();
         
@@ -46,7 +46,7 @@ public class FileBrowser extends Activity {
         up.setOnClickListener(OnUpClick);
         
         //Keep updating the address location
-        browsePath = (TextView)findViewById(R.id.browsePath);
+        browsePath = (TextView)findViewById(R.id.browse_path);
         browsePath.setText("/proc");
         
     }

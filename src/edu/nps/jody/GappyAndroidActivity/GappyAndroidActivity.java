@@ -75,14 +75,14 @@ public class GappyAndroidActivity extends Activity
     {
     		setContentView(R.layout.main);
 					path		= (EditText)findViewById(R.id.path);
-			Button		pathGo		= (Button)findViewById(R.id.pathGo);
-			Button		pathBrowse	= (Button)findViewById(R.id.pathBrowse);
+			Button		pathGo		= (Button)findViewById(R.id.path_go);
+			Button		pathBrowse	= (Button)findViewById(R.id.path_browse);
 			
 					file		= (EditText)findViewById(R.id.file);
-			Button		fileGo		= (Button)findViewById(R.id.fileGo);
-			Button		fileBrowse	= (Button)findViewById(R.id.fileBrowse);
+			Button		fileGo		= (Button)findViewById(R.id.file_go);
+			Button		fileBrowse	= (Button)findViewById(R.id.file_browse);
 			
-					fileView	= (TextView)findViewById(R.id.fileView);
+					fileView	= (TextView)findViewById(R.id.file_view);
 			
 			path.setText(filePath);
 			//updateReceiver();
@@ -162,7 +162,7 @@ public class GappyAndroidActivity extends Activity
     		setContentView(R.layout.browser);
     		
     		//Create a list view, populate it with an array of files, display the view and listen for click
-            listView = (ListView)findViewById(R.id.listView);
+            listView = (ListView)findViewById(R.id.list_view);
             
             File[] files= new File(filePath).listFiles();
             
@@ -187,7 +187,7 @@ public class GappyAndroidActivity extends Activity
             select.setOnClickListener(onSelectClick);
             
             //Keep updating the address location
-            browsePath = (TextView)findViewById(R.id.browsePath);
+            browsePath = (TextView)findViewById(R.id.browse_path);
             browsePath.setText(filePath);
             
     }

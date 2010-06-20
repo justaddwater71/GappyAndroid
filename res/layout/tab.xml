@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-		 xmlns:android="http://schemas.android.com/apk/res/android"
->
 	<TabHost 
-
-		 android:id="@+id/tabHost"
+		 xmlns:android="http://schemas.android.com/apk/res/android"
+		 android:id="@android:id/tabhost"
 		 android:layout_width="fill_parent"
 		 android:layout_height="fill_parent"
 	 >
+	 <LinearLayout
+		 xmlns:android="http://schemas.android.com/apk/res/android"
+		 android:orientation="vertical"
+		 android:layout_width="fill_parent"
+		 android:layout_height="fill_parent"		 
+	>
 	 	<TabWidget
-	 		android:id="@+id/tabs"
+	 	 android:id="@android:id/tabs"
+		 android:layout_width="fill_parent"
+		 android:layout_height="wrap_content"	
 	 	/>
 	 	<FrameLayout
-	 		android:id="@+id/config"
+	 		android:id="@android:id/tabcontent"
 	 		android:layout_width="fill_parent"
 	 		android:layout_height="fill_parent"
 	 	>
 	 		<TableLayout
-	 			android:id="@+id/configTable"
+	 			android:id="@+id/config_table"
 	 			android:layout_width="fill_parent"
 	 			android:layout_height="fill_parent"
 	 		>
 	 			<TableRow>
 	 				<RelativeLayout
-	 					android:id="@+id/SmsReceiverOn"
+	 					android:id="@+id/sms_receiver_on"
 	 					android:layout_width="fill_parent"
 	 					android:layout_height="wrap_content"
 	 				>
 	 				</RelativeLayout>
 	 			</TableRow>
 	 		</TableLayout>
-	 	</FrameLayout>
 	 	
-	 	
-	 	<FrameLayout
-	 		android:id="@+id/fileViewer"
-	 		android:layout_width="fill_parent"
-	 		android:layout_height="fill_parent"
-	 	>
 		<TableLayout
+			android:id="@+id/file_viewer"
 		    android:orientation="vertical"
 		    android:layout_width="fill_parent"
 		    android:layout_height="fill_parent"
@@ -64,7 +63,7 @@
 						    />
 						    
 						    <Button
-						    	android:id="@+id/pathBrowse"
+						    	android:id="@+id/path_browse"
 						    	android:layout_width="wrap_content"
 						    	android:layout_height="wrap_content"
 						    	android:layout_marginTop="3sp"
@@ -73,7 +72,7 @@
 					    	/>
 					    
 						    <Button
-						    	android:id="@+id/pathGo"
+						    	android:id="@+id/path_go"
 						    	android:layout_width="wrap_content"
 						    	android:layout_height="wrap_content"
 						    	android:layout_marginTop="3sp"
@@ -103,7 +102,7 @@
 					    />
 					    
 					    <Button
-					    	android:id="@+id/fileBrowse"
+					    	android:id="@+id/file_browse"
 					    	android:layout_width="wrap_content"
 					    	android:layout_height="wrap_content"
 					    	android:layout_marginTop="3sp"
@@ -112,7 +111,7 @@
 					    />
 					    
 					    <Button
-					    	android:id="@+id/fileGo"
+					    	android:id="@+id/file_go"
 					    	android:layout_width="wrap_content"
 					    	android:layout_height="wrap_content"
 					    	android:layout_marginTop="3sp"
@@ -134,7 +133,7 @@
 						android:layout_weight="1.0"
 					>
 						<TextView
-							android:id="@+id/fileView"
+							android:id="@+id/file_view"
 							android:layout_width="fill_parent"
 							android:layout_height="fill_parent"
 							android:textColor="@color/textview_text_color"
@@ -145,6 +144,13 @@
 					</RelativeLayout>
 				</TableRow>
 			</TableLayout>
+			
+			<TextView
+				android:id="@+id/help_about"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+			/>
+			
 	 	</FrameLayout>
-	 </TabHost>
-</LinearLayout>	
+ 	</LinearLayout>	
+ </TabHost>

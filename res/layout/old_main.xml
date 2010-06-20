@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    >
+	    <TableRow>
+	    	<TextView
+	    		android:text="Path"
+	    	/>
+	    </TableRow>
+	    
+	    <TableRow>
+					<EditText  
+						android:id="@+id/path"
+					    android:layout_width="fill_parent" 
+					    android:layout_height="fill_parent"
+					    android:background="@color/textview_color" 
+					    android:layout_weight=".85"
+					    android:layout_margin="@dimen/textview_margin"
+					    android:editable="true"
+					    android:inputType="text"
+					    android:textColor="@color/textview_text_color"
+					    android:padding="@dimen/textview_padding"
+				    />
+				    
+				    <Button
+				    	android:id="@+id/pathBrowse"
+				    	android:layout_width="wrap_content"
+				    	android:layout_height="wrap_content"
+				    	android:layout_marginTop="3sp"
+				    	android:layout_toRightOf="@id/path"
+				    	android:text="Br"
+			    	/>
+			    
+				    <Button
+				    	android:id="@+id/pathGo"
+				    	android:layout_width="wrap_content"
+				    	android:layout_height="wrap_content"
+				    	android:layout_marginTop="3sp"
+				    	android:layout_toRightOf="@id/pathBrowse"
+				    	android:text="Go"
+				    />
+		</TableRow>	
+		
+		<TableRow>
+			<TextView
+				android:text="Filename"
+			/>
+		</TableRow>
+		
+		<TableRow>	
+				<EditText  
+					android:id="@+id/file"
+				   	android:layout_width="fill_parent" 
+				    android:layout_height="fill_parent"
+				    android:background="@color/textview_color" 
+				    android:layout_weight=".70"
+				    android:layout_margin="@dimen/textview_margin"
+				    android:editable="true"
+				    android:inputType="text"
+				    android:textColor="@color/textview_text_color"
+				    android:padding="@dimen/textview_padding"
+			    />
+			    
+			    <Button
+			    	android:id="@+id/fileBrowse"
+			    	android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	android:layout_marginTop="3sp"
+			    	android:layout_toRightOf="@id/file"
+			    	android:text="Br"
+			    />
+			    
+			    <Button
+			    	android:id="@+id/fileGo"
+			    	android:layout_width="wrap_content"
+			    	android:layout_height="wrap_content"
+			    	android:layout_marginTop="3sp"
+			    	android:layout_toRightOf="@id/fileBrowse"
+			    	android:text="Go"
+			    />
+
+		</TableRow>
+		
+		<TableRow>
+	    	<TextView
+	    		android:text="File Viewer"
+	    	/>
+	    </TableRow>
+	    
+		<TableRow>	
+			<RelativeLayout
+				android:orientation="vertical"
+				android:layout_weight="1.0"
+			>
+				<TextView
+					android:id="@+id/fileView"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:textColor="@color/textview_text_color"
+					android:background="#ffffffff"
+					android:layout_margin="3sp"
+					android:layout_weight="1.0"
+				/>
+			</RelativeLayout>
+		</TableRow>
+	</TableLayout>

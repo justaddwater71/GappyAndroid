@@ -14,7 +14,7 @@
 			android:background="@color/list_background"
 		>
 			<TextView
-				android:id="@+id/browsePath"
+				android:id="@+id/browse_path"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="0.85"
@@ -30,7 +30,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="3sp"
-				android:layout_toRightOf="@id/browsePath"
+				android:layout_toRightOf="@id/browse_path"
 				android:text="Up"
 				android:textStyle="bold"
 			/>
@@ -55,7 +55,7 @@
 			/>
 			
 			<ListView
-				android:id="@+id/listView"
+				android:id="@+id/list_view"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:divider="@color/list_background"
