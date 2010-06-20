@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 //import android.content.Intent;
@@ -21,10 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TabHost.TabSpec;
 
-public class GappyAndroidActivity extends Activity 
+public class GappyAndroidActivity extends TabActivity 
 {
 	//Data Members
 		//Config file
@@ -74,6 +77,26 @@ public class GappyAndroidActivity extends Activity
     private void mainView()
     {
     		setContentView(R.layout.main);
+    		
+    		TabHost myTabHost = getTabHost();
+    		
+    		TabSpec myTabSpecConfig = myTabHost.newTabSpec("configTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
+    		myTabSpecConfig.setIndicator("Configure");
+    		myTabSpecConfig.setContent(R.id.config_table);
+    		myTabHost.addTab(myTabSpecConfig);
+    		
+    		TabSpec myTabSpecFIleViewer = myTabHost.newTabSpec("fileViewerTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
+    		myTabSpecFIleViewer.setIndicator("FIle Viewer");
+    		myTabSpecFIleViewer.setContent(R.id.file_viewer);
+    		myTabHost.addTab(myTabSpecFIleViewer);
+    		
+    		TabSpec myTabSpecHelpAbout = myTabHost.newTabSpec("helpAboutTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
+    		myTabSpecHelpAbout.setIndicator("Help-About");
+    		myTabSpecHelpAbout.setContent(R.id.help_about);
+    		myTabHost.addTab(myTabSpecHelpAbout);
+    		
+    		myTabHost.setCurrentTab(0);
+    		
 					path		= (EditText)findViewById(R.id.path);
 			Button		pathGo		= (Button)findViewById(R.id.path_go);
 			Button		pathBrowse	= (Button)findViewById(R.id.path_browse);
