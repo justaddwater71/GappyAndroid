@@ -34,15 +34,8 @@
 	 				>
 	 				</RelativeLayout>
 	 			</TableRow>
-	 		</TableLayout>
-	 	
-		<TableLayout
-			android:id="@+id/file_viewer"
-		    android:orientation="vertical"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		    >
-		 		<TableRow>
+	 			
+	 			<TableRow>
 		    	<TextView
 		    		android:text="Path"
 		    	/>
@@ -80,6 +73,16 @@
 						    	android:text="Go"
 						    />
 				</TableRow>	
+	 			
+	 		</TableLayout>
+	 	
+		<TableLayout
+			android:id="@+id/file_viewer"
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    >
+		 		
 				
 				<TableRow>
 					<TextView

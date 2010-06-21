@@ -86,7 +86,7 @@ public class GappyAndroidActivity extends TabActivity
     		myTabHost.addTab(myTabSpecConfig);
     		
     		TabSpec myTabSpecFIleViewer = myTabHost.newTabSpec("fileViewerTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecFIleViewer.setIndicator("FIle Viewer");
+    		myTabSpecFIleViewer.setIndicator("File Viewer");
     		myTabSpecFIleViewer.setContent(R.id.file_viewer);
     		myTabHost.addTab(myTabSpecFIleViewer);
     		
