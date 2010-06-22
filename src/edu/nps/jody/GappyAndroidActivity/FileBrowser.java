@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
@@ -17,13 +18,30 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FileBrowser extends Activity {
     //Data Members
-
+		//guiBrowse
+		File 			currentDirectory;
+		ListView listView;
+		TextView browsePath;
+		String		filePath; //Need to get this from the Activity Preference File
+		String		fileContents;//Need to integrate this into GappyAndroidActivity as a return value;
+		EditText path;
+		String		 fileName = "";
+		
+		//Config file
+		//TODO Ensure this reads the same preference file as GappyAndroidActivity or this is all a bust.
+		final static String PREF_FILE = "preferenceFile";
+		final static String PATH = "filePath";
+		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
+		public static final String FILE_PATH = "FILE_PATH";
+		SharedPreferences pref;
+		SharedPreferences.Editor editor;
 	
 	//Constructor
     @Override
@@ -31,6 +49,10 @@ public class FileBrowser extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
+        
+        path		= (EditText)findViewById(R.id.path);
+        currentDirectory = new File(filePath);
+        
     }
     
     private void guiBrowse(boolean openFIle)
@@ -80,7 +102,7 @@ public class FileBrowser extends Activity {
 			fileName="";
 			fileContents="";
 			
-			mainView();
+			mainView();//TODO This is where the return
 			
 		}
     	
@@ -286,6 +308,7 @@ public class FileBrowser extends Activity {
 					
 					
 					//Update the fields for the main view
+					//TODO Update these to use preference file insead
 					path.setText(currentDirectory.getAbsolutePath());
 					filePath=currentDirectory.getAbsolutePath();
 					editor.putString(PATH, filePath);
@@ -293,7 +316,7 @@ public class FileBrowser extends Activity {
 					fileName=tempFile.getName();
 					
 					//Go back to the mainview
-					mainView();
+					mainView();//TODO FIX THIS: This is where the return will go;
 					
 				} 
 				catch (FileNotFoundException e) 
