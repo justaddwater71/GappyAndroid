@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@color/list_background"
+>
+			
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/list_background"
+		>
+			<TextView
+				android:id="@+id/browse_path"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.85"
+				android:padding="7sp"
+				android:gravity="center_vertical"
+				android:layout_margin="3sp"
+				android:textColor="@color/address_text"
+				android:background="@color/address_background"
+			/>
+
+			<Button
+				android:id="@+id/up"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="3sp"
+				android:layout_toRightOf="@id/browse_path"
+				android:text="Up"
+				android:textStyle="bold"
+			/>
+		</LinearLayout>
+			
+			
+		<RelativeLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:background="@color/list_background"
+		>
+
+			<Button
+				android:id="@+id/select"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="Select"
+				android:textStyle="bold"
+				android:layout_alignParentBottom="true"
+				android:layout_marginTop="5sp"
+			/>
+			
+			<ListView
+				android:id="@+id/list_view"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:divider="@color/list_background"
+				android:background="@color/address_background"
+				android:cacheColorHint="@color/address_background"
+				android:layout_alignParentTop="true"
+				android:layout_above="@id/select"
+			/>
+			
+		</RelativeLayout>
+
+</LinearLayout>

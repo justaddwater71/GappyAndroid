@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import android.app.Activity;
+//import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
@@ -81,17 +81,17 @@ public class GappyAndroidActivity extends TabActivity
     		TabHost myTabHost = getTabHost();
     		
     		TabSpec myTabSpecConfig = myTabHost.newTabSpec("configTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecConfig.setIndicator("Configure");
+    		myTabSpecConfig.setIndicator("Configure", getResources().getDrawable(R.drawable.app_sample_code));
     		myTabSpecConfig.setContent(R.id.config_table);
     		myTabHost.addTab(myTabSpecConfig);
     		
     		TabSpec myTabSpecFIleViewer = myTabHost.newTabSpec("fileViewerTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecFIleViewer.setIndicator("File Viewer");
+    		myTabSpecFIleViewer.setIndicator("File Viewer", getResources().getDrawable(R.drawable.app_sample_code));
     		myTabSpecFIleViewer.setContent(R.id.file_viewer);
     		myTabHost.addTab(myTabSpecFIleViewer);
     		
     		TabSpec myTabSpecHelpAbout = myTabHost.newTabSpec("helpAboutTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecHelpAbout.setIndicator("Help-About");
+    		myTabSpecHelpAbout.setIndicator("Help-About", getResources().getDrawable(R.drawable.app_sample_code));
     		myTabSpecHelpAbout.setContent(R.id.help_about);
     		myTabHost.addTab(myTabSpecHelpAbout);
     		
