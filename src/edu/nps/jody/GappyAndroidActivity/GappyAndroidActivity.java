@@ -1,27 +1,28 @@
 package edu.nps.jody.GappyAndroidActivity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import android.app.AlertDialog;
+//import java.io.BufferedReader;
+//import java.io.File;
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
+//import java.io.IOException;
+//import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
-import android.content.DialogInterface;
+//import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
+//import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+//import android.widget.AdapterView;
+//import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+//import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+//import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TabHost.TabSpec;
 
 public class GappyAndroidActivity extends TabActivity 
@@ -122,7 +123,8 @@ public class GappyAndroidActivity extends TabActivity
 			editor.commit();
 			fileName = file.getText().toString();
 			hideKeyboard(view);
-			guiBrowse(false);
+			//guiBrowse(false);
+			sendToFileBrowser(false);
 		}
     	
     };
@@ -135,7 +137,8 @@ public class GappyAndroidActivity extends TabActivity
 			//Launch FileBrowser as another view vice a new Activity, pass parameter to only allow files
 			hideKeyboard(view);
 			
-			guiBrowse(true);
+			//guiBrowse(true)
+			sendToFileBrowser(true);
 		}
     	
     };
@@ -181,6 +184,15 @@ public class GappyAndroidActivity extends TabActivity
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
         //End copy from stackoverflow
+	}
+	
+	private void sendToFileBrowser(boolean directory)
+	{
+		//Bundle	startFileBrowserBundle = new Bundle();
+		
+		Intent		startFileBrowserIntent = new Intent(GappyAndroidActivity.this, FileBrowser.class);
+		
+		startActivity(startFileBrowserIntent);
 	}
     
 }

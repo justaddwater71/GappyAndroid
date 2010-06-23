@@ -8,13 +8,13 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
+//import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+//import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,10 +29,11 @@ public class FileBrowser extends Activity {
 		File 			currentDirectory;
 		ListView listView;
 		TextView browsePath;
-		String		filePath; //Need to get this from the Activity Preference File
-		String		fileContents;//Need to integrate this into GappyAndroidActivity as a return value;
+		String		filePath; //TODO Need to get this from the Activity Preference File
+		String		fileContents;//TODO Need to integrate this into GappyAndroidActivity as a return value;
 		EditText path;
 		String		 fileName = "";
+		boolean	openFile;
 		
 		//Config file
 		//TODO Ensure this reads the same preference file as GappyAndroidActivity or this is all a bust.
@@ -53,12 +54,8 @@ public class FileBrowser extends Activity {
         path		= (EditText)findViewById(R.id.path);
         currentDirectory = new File(filePath);
         
-    }
-    
-    private void guiBrowse(boolean openFIle)
-    {
-    		setContentView(R.layout.browser);
-    		
+        openFile = true; //TODO Fix temporary boolean hardwire on openFile
+
     		//Create a list view, populate it with an array of files, display the view and listen for click
             listView = (ListView)findViewById(R.id.list_view);
             
@@ -68,7 +65,7 @@ public class FileBrowser extends Activity {
             
             listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, fileNames));
             
-            if (openFIle)
+            if (openFile)
             {
             	listView.setOnItemClickListener(onOpenListClick);
             }
@@ -102,7 +99,7 @@ public class FileBrowser extends Activity {
 			fileName="";
 			fileContents="";
 			
-			mainView();//TODO This is where the return
+			//mainView();//TODO This is where the return
 			
 		}
     	
@@ -229,16 +226,16 @@ public class FileBrowser extends Activity {
 		return fileOnly;
 	}
 	
-	private void hideKeyboard(View view)
+	/*private void hideKeyboard(View view)
 	{
-		/*
+		
 		 * Below hide-keyboard code copied from
 		 * http://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard
-		 */
+		 
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
         //End copy from stackoverflow
-	}
+	}*/
     
 	private OnItemClickListener onOpenListClick = new OnItemClickListener()
 	{
@@ -316,7 +313,7 @@ public class FileBrowser extends Activity {
 					fileName=tempFile.getName();
 					
 					//Go back to the mainview
-					mainView();//TODO FIX THIS: This is where the return will go;
+					//mainView();//TODO FIX THIS: This is where the return will go;
 					
 				} 
 				catch (FileNotFoundException e) 
