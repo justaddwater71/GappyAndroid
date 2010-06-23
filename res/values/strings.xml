@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="sms_receiver">sms_receiver</string>   
+    <string name="sms_receiver">SMS Receiver</string>   
     <string name="app_name">Gappy Android Activity</string>
-	<string name="ACTION_UPDATE_PATH">ACTION_UPDATE_PATH</string>
-<string name="file_browser">file_browser</string>
+	
+<string name="file_browser">File Browser</string>
 </resources>
 

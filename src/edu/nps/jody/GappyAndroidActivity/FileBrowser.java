@@ -52,6 +52,9 @@ public class FileBrowser extends Activity {
         setContentView(R.layout.browser);
         
         path		= (EditText)findViewById(R.id.path);
+        
+        //filePath = pref.getString(PATH, "/sdcard");
+        filePath="/sdcard";
         currentDirectory = new File(filePath);
         
         openFile = true; //TODO Fix temporary boolean hardwire on openFile
