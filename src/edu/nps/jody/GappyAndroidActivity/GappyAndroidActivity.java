@@ -31,30 +31,28 @@ public class GappyAndroidActivity extends TabActivity
 {
 	//Data Members
 		//Config file
-		final static String PREF_FILE = "preferenceFile";
-		final static String PATH = "filePath";
+		private final String PREF_FILE 	= getString(R.string.pref_file);
+		private final String PATH 			= getString(R.string.path);
 		
-		
-	
 		//GappyAndroid
-		String		 filePath = "/";
+		private			 String		 filePath 			= "/";
 		
 		//PATH, filePath;
-		EditText 	path;
+		private 			EditText 	path;
 		
-		String		 fileName = "";
-		EditText	 file;
+		private 			String		 fileName 		= "";
+		private			EditText	 file;
 		
-		String fileContents = "";
-		TextView fileView;
+		private			String 		fileContents 	= "";
+		private			TextView fileView;
 		
 		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
-		public static final String FILE_PATH = "FILE_PATH";
-		private static final int GET_NEW_PATH = 0;
-		private static final int GET_VIEW_FILE = 1;
-		private static final String FILE_OPEN = "FILE_OPEN";
-		SharedPreferences pref;
-		SharedPreferences.Editor editor;
+		private			final String 	FILE_PATH = getString(R.string.file_path);//"FILE_PATH";
+		private			final int 		GET_NEW_PATH = R.raw.get_new_path; //=0;
+		private			final int 		GET_VIEW_FILE = R.raw.get_view_file;
+		private			final String 	FILE_OPEN = getString(R.string.file_open);
+		private			SharedPreferences pref;
+		private			SharedPreferences.Editor editor;
 		
 	//Constructors
     /** Called when the activity is first created. */

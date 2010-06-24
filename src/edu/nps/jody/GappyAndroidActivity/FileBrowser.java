@@ -27,22 +27,22 @@ import android.widget.AdapterView.OnItemClickListener;
 public class FileBrowser extends Activity {
     //Data Members
 		//guiBrowse
-		File 			currentDirectory;
-		ListView listView;
-		TextView browsePath;
-		String		filePath; //TODO Need to get this from the Activity Preference File
-		String		fileContents;//TODO Need to integrate this into GappyAndroidActivity as a return value;
-		EditText path;
-		String		 fileName = "";
-		boolean	openFile;
+		private		File 			currentDirectory;
+		private		ListView listView;
+		private		TextView browsePath;
+		private		String		filePath; //TODO Need to get this from the Activity Preference File
+		private		String		fileContents;//TODO Need to integrate this into GappyAndroidActivity as a return value;
+		private		EditText 	path;
+		private		String		fileName = "";
+		private		boolean	openFile;
 		
 		//Config file
 		//TODO Ensure this reads the same preference file as GappyAndroidActivity or this is all a bust.
 		//final static String PREF_FILE = "preferenceFile";
 		//final static String PATH = "filePath";
 		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
-		public static final String FILE_PATH = "FILE_PATH";
-		public static final String OPEN_FILE = "OPEN_FILE";
+		public final String FILE_PATH = getString(R.string.file_path);
+		public final String FILE_OPEN = getString(R.string.file_open);
 		//Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -58,7 +58,7 @@ public class FileBrowser extends Activity {
         
         currentDirectory = new File(filePath);
         
-        openFile = extras.getBoolean(OPEN_FILE);
+        openFile = extras.getBoolean(FILE_OPEN);
 
     		//Create a list view, populate it with an array of files, display the view and listen for click
             listView = (ListView)findViewById(R.id.list_view);
