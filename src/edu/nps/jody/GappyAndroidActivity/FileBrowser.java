@@ -42,6 +42,7 @@ public class FileBrowser extends Activity {
 		//final static String PATH = "filePath";
 		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
+		public static final String OPEN_FILE = "OPEN_FILE";
 		//Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -55,12 +56,9 @@ public class FileBrowser extends Activity {
         
         path		= (EditText)findViewById(R.id.path);
         
-        //filePath = pref.getString(PATH, "/sdcard");
-       // filePath="/sdcard";
-        
         currentDirectory = new File(filePath);
         
-        openFile = false; //TODO Fix temporary boolean hardwire on openFile
+        openFile = extras.getBoolean(OPEN_FILE);
 
     		//Create a list view, populate it with an array of files, display the view and listen for click
             listView = (ListView)findViewById(R.id.list_view);
@@ -100,8 +98,6 @@ public class FileBrowser extends Activity {
     	
 		public void onClick(View v) 
 		{
-			String testCurrentDirectoryAbsolutePath = currentDirectory.getAbsolutePath();
-			//path.setText(testCurrentDirectoryAbsolutePath);
 			//path.setText(currentDirectory.getAbsolutePath());
 			filePath=currentDirectory.getAbsolutePath();
 			//editor.putString(PATH, filePath);

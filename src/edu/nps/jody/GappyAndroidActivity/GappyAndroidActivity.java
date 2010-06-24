@@ -48,9 +48,11 @@ public class GappyAndroidActivity extends TabActivity
 		String fileContents = "";
 		TextView fileView;
 		
-		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
+		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
 		private static final int GET_NEW_PATH = 0;
+		private static final int GET_VIEW_FILE = 1;
+		private static final String FILE_OPEN = "FILE_OPEN";
 		SharedPreferences pref;
 		SharedPreferences.Editor editor;
 		
@@ -191,26 +193,24 @@ public class GappyAndroidActivity extends TabActivity
 	
 	private void sendToFileBrowser(boolean directory)
 	{
-		//Bundle	startFileBrowserBundle = new Bundle();
 		
 		Intent		startFileBrowserIntent = new Intent(GappyAndroidActivity.this, FileBrowser.class);
-		
-		//Bundle startFileBrowserBundle = startFileBrowserIntent.getExtras();
 		
 		Bundle startFileBrowserBundle = new Bundle();
 		
 		startFileBrowserBundle.putString(FILE_PATH, filePath);
 		
+		startFileBrowserBundle.putBoolean(FILE_OPEN, directory);
+		
 		startFileBrowserIntent.putExtras(startFileBrowserBundle);
 		
-		
-		try
+		if (directory)
 		{
-			startActivityForResult(startFileBrowserIntent, GET_NEW_PATH);
+				startActivityForResult(startFileBrowserIntent, GET_NEW_PATH);
 		}
-		catch (ActivityNotFoundException e)
+		else
 		{
-			Toast.makeText(getBaseContext(), "Darn", Toast.LENGTH_LONG);
+			startActivityForResult(startFileBrowserIntent, GET_VIEW_FILE);
 		}
 	}
     
@@ -232,6 +232,23 @@ public class GappyAndroidActivity extends TabActivity
 	                
 	    			editor.putString(PATH, filePath);
 	    			editor.commit();
+	    			fileName = file.getText().toString();
+	            }
+	            break;
+	            
+	        case GET_VIEW_FILE:
+	            if (resultCode == RESULT_CANCELED){
+	                //Do nothing
+	            } 
+	            else {
+	                Bundle result = data.getExtras();
+	                
+	                //filePath = result.getString(FILE_PATH);
+	                //path.setText(filePath);
+	                
+	    			//editor.putString(PATH, filePath);
+	    			//editor.commit();
+	                //TODO Get the file view mechanism straightened out, are we passing a FIle or a String read from File in FileBrowser?
 	    			fileName = file.getText().toString();
 	            }
 	        default:
