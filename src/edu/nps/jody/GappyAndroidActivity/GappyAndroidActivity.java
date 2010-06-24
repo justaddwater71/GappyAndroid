@@ -9,6 +9,7 @@ package edu.nps.jody.GappyAndroidActivity;
 import android.app.TabActivity;
 import android.content.Context;
 //import android.content.DialogInterface;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 //import android.content.DialogInterface.OnClickListener;
@@ -19,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 //import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 //import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ public class GappyAndroidActivity extends TabActivity
 		
 		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
+		private static final int GET_NEW_PATH = 0;
 		SharedPreferences pref;
 		SharedPreferences.Editor editor;
 		
@@ -74,17 +77,17 @@ public class GappyAndroidActivity extends TabActivity
     		TabHost myTabHost = getTabHost();
     		
     		TabSpec myTabSpecConfig = myTabHost.newTabSpec("configTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecConfig.setIndicator("Configure", getResources().getDrawable(R.drawable.app_sample_code));
+    		myTabSpecConfig.setIndicator("Configure", getResources().getDrawable(R.drawable.ic_menu_preferences));
     		myTabSpecConfig.setContent(R.id.config_table);
     		myTabHost.addTab(myTabSpecConfig);
     		
     		TabSpec myTabSpecFIleViewer = myTabHost.newTabSpec("fileViewerTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecFIleViewer.setIndicator("File Viewer", getResources().getDrawable(R.drawable.app_sample_code));
+    		myTabSpecFIleViewer.setIndicator("File Viewer", getResources().getDrawable(R.drawable.ic_menu_view));
     		myTabSpecFIleViewer.setContent(R.id.file_viewer);
     		myTabHost.addTab(myTabSpecFIleViewer);
     		
     		TabSpec myTabSpecHelpAbout = myTabHost.newTabSpec("helpAboutTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
-    		myTabSpecHelpAbout.setIndicator("Help-About", getResources().getDrawable(R.drawable.app_sample_code));
+    		myTabSpecHelpAbout.setIndicator("Help-About", getResources().getDrawable(R.drawable.ic_menu_info_details));
     		myTabSpecHelpAbout.setContent(R.id.help_about);
     		myTabHost.addTab(myTabSpecHelpAbout);
     		
@@ -121,7 +124,7 @@ public class GappyAndroidActivity extends TabActivity
 			filePath = path.getText().toString();
 			editor.putString(PATH, filePath);
 			editor.commit();
-			fileName = file.getText().toString();
+			//fileName = file.getText().toString();
 			hideKeyboard(view);
 			//guiBrowse(false);
 			sendToFileBrowser(false);
@@ -192,7 +195,48 @@ public class GappyAndroidActivity extends TabActivity
 		
 		Intent		startFileBrowserIntent = new Intent(GappyAndroidActivity.this, FileBrowser.class);
 		
-		startActivity(startFileBrowserIntent);
+		//Bundle startFileBrowserBundle = startFileBrowserIntent.getExtras();
+		
+		Bundle startFileBrowserBundle = new Bundle();
+		
+		startFileBrowserBundle.putString(FILE_PATH, filePath);
+		
+		startFileBrowserIntent.putExtras(startFileBrowserBundle);
+		
+		
+		try
+		{
+			startActivityForResult(startFileBrowserIntent, GET_NEW_PATH);
+		}
+		catch (ActivityNotFoundException e)
+		{
+			Toast.makeText(getBaseContext(), "Darn", Toast.LENGTH_LONG);
+		}
 	}
     
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+	    // See which child activity is calling us back.
+	    switch (requestCode) {
+	        case GET_NEW_PATH:
+	            // This is the standard resultCode that is sent back if the
+	            // activity crashed or didn't doesn't supply an explicit result.
+	            if (resultCode == RESULT_CANCELED){
+	                //Do nothing
+	            } 
+	            else {
+	                Bundle result = data.getExtras();
+	                
+	                filePath = result.getString(FILE_PATH);
+	                path.setText(filePath);
+	                
+	    			editor.putString(PATH, filePath);
+	    			editor.commit();
+	    			fileName = file.getText().toString();
+	            }
+	        default:
+	            break;
+	    }
+	}
+	
 }

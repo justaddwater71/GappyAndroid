@@ -10,7 +10,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 //import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.content.Intent;
+//import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
@@ -37,27 +38,29 @@ public class FileBrowser extends Activity {
 		
 		//Config file
 		//TODO Ensure this reads the same preference file as GappyAndroidActivity or this is all a bust.
-		final static String PREF_FILE = "preferenceFile";
-		final static String PATH = "filePath";
-		public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
+		//final static String PREF_FILE = "preferenceFile";
+		//final static String PATH = "filePath";
+		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public static final String FILE_PATH = "FILE_PATH";
-		SharedPreferences pref;
-		SharedPreferences.Editor editor;
-	
-	//Constructor
+		//Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
         
+        Bundle extras = this.getIntent().getExtras();
+        
+        filePath = extras.getString(FILE_PATH);
+        
         path		= (EditText)findViewById(R.id.path);
         
         //filePath = pref.getString(PATH, "/sdcard");
-        filePath="/sdcard";
+       // filePath="/sdcard";
+        
         currentDirectory = new File(filePath);
         
-        openFile = true; //TODO Fix temporary boolean hardwire on openFile
+        openFile = false; //TODO Fix temporary boolean hardwire on openFile
 
     		//Create a list view, populate it with an array of files, display the view and listen for click
             listView = (ListView)findViewById(R.id.list_view);
@@ -93,17 +96,33 @@ public class FileBrowser extends Activity {
     private Button.OnClickListener onSelectClick = new Button.OnClickListener()
     {
 
+    	//TODO Ensure onSelectClick provides a directory and onItemClick provides a FILE, when appropriate
+    	
 		public void onClick(View v) 
 		{
-			path.setText(currentDirectory.getAbsolutePath());
+			String testCurrentDirectoryAbsolutePath = currentDirectory.getAbsolutePath();
+			//path.setText(testCurrentDirectoryAbsolutePath);
+			//path.setText(currentDirectory.getAbsolutePath());
 			filePath=currentDirectory.getAbsolutePath();
-			editor.putString(PATH, filePath);
-			editor.commit();
+			//editor.putString(PATH, filePath);
+			//editor.commit();
 			fileName="";
 			fileContents="";
 			
 			//mainView();//TODO This is where the return
 			
+			Intent resultIntent = new Intent();
+			
+			Bundle results = new Bundle();
+			//Bundle results = resultIntent.getExtras();
+			
+			results.putString(FILE_PATH, filePath);
+			
+			resultIntent.putExtras(results);
+			
+			setResult(RESULT_OK, resultIntent);
+			
+			finish();
 		}
     	
     };
@@ -309,10 +328,10 @@ public class FileBrowser extends Activity {
 					
 					//Update the fields for the main view
 					//TODO Update these to use preference file insead
-					path.setText(currentDirectory.getAbsolutePath());
+					//path.setText(currentDirectory.getAbsolutePath());
 					filePath=currentDirectory.getAbsolutePath();
-					editor.putString(PATH, filePath);
-					editor.commit();//TODO Really need to make an updatePath method if the receiver thing works
+					//editor.putString(PATH, filePath);
+					//editor.commit();//TODO Really need to make an updatePath method if the receiver thing works
 					fileName=tempFile.getName();
 					
 					//Go back to the mainview
