@@ -51,6 +51,7 @@ public class GappyAndroidActivity extends TabActivity
 		private			final int 		GET_NEW_PATH = R.raw.get_new_path; //=0;
 		private			final int 		GET_VIEW_FILE = R.raw.get_view_file;
 		private			final String 	FILE_OPEN = getString(R.string.file_open);
+		private			final String	FILE_CONTENT = getString(R.string.file_content);
 		private			SharedPreferences pref;
 		private			SharedPreferences.Editor editor;
 		
@@ -240,6 +241,8 @@ public class GappyAndroidActivity extends TabActivity
 	            } 
 	            else {
 	                Bundle result = data.getExtras();
+	                
+	                fileContents = result.getString(FILE_CONTENT);
 	                
 	                //filePath = result.getString(FILE_PATH);
 	                //path.setText(filePath);

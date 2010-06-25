@@ -11,5 +11,6 @@
 <string name="path">filePath</string>
 <string name="file_open">FILE_OPEN</string>
 
+<string name="file_content">FILE_CONTENT</string>
 </resources>
 

@@ -43,6 +43,7 @@ public class FileBrowser extends Activity {
 		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
 		public final String FILE_PATH = getString(R.string.file_path);
 		public final String FILE_OPEN = getString(R.string.file_open);
+		private final String FILE_CONTENT = getString(R.string.file_content);
 		//Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -113,6 +114,8 @@ public class FileBrowser extends Activity {
 			//Bundle results = resultIntent.getExtras();
 			
 			results.putString(FILE_PATH, filePath);
+			
+			results.putString(FILE_CONTENT, fileContents);
 			
 			resultIntent.putExtras(results);
 			
