@@ -30,32 +30,28 @@ import android.widget.TabHost.TabSpec;
 public class GappyAndroidActivity extends TabActivity 
 {
 	//TODO Add actual version number to package
+	//TODO Need to ensure that "Go" Button functionality is not completely wrecked after moving FIleBrowser out to its own Activity
+	//TODO Read finals from res files vice hard coding in
 	//Data Members
-		//Config file
-		private final String PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
-		private final String PATH 			= "PATH";//getString(R.string.path);
+		//Gappy Android Data Members
+		private final 	String 		PATH 			= "PATH";//getString(R.string.path);
+		private			 	String		filePath 			= "/";
+		private 				EditText 	path;
+		private 				String		fileName 		= "";
+		private				EditText	file;
+		private				String 		fileContents 	= "";
+		private				TextView fileView;
+		private	final 	String 		FILE_PATH = "FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
+		private	final 	int 			GET_NEW_PATH = 0;//R.raw.get_new_path; //=0;
+		private	final 	int 			GET_VIEW_FILE = 1;//R.raw.get_view_file;
+		private	final 	String 		FILE_OPEN ="FILE_OPEN"; // getString(R.string.file_open);
+		private	final 	String		FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
+		private	final 	String		FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
 		
-		//GappyAndroid
-		private			 String		 filePath 			= "/";
-		
-		//PATH, filePath;
-		private 			EditText 	path;
-		
-		private 			String		 fileName 		= "";
-		private			EditText	 file;
-		
-		private			String 		fileContents 	= "";
-		private			TextView fileView;
-		
-		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
-		private			final String 	FILE_PATH = "FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
-		private			final int 		GET_NEW_PATH = 0;//R.raw.get_new_path; //=0;
-		private			final int 		GET_VIEW_FILE = 1;//R.raw.get_view_file;
-		private			final String 	FILE_OPEN ="FILE_OPEN"; // getString(R.string.file_open);
-		private			final String	FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
-		private			final String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
-		private			SharedPreferences pref;
-		private			SharedPreferences.Editor editor;
+		//Preference File Data Members
+		private final 	String 		PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
+		private				SharedPreferences 				pref;
+		private				SharedPreferences.Editor 	editor;
 		
 	//Constructors
     /** Called when the activity is first created. */
@@ -77,18 +73,22 @@ public class GappyAndroidActivity extends TabActivity
     {
     		setContentView(R.layout.main);
     		
+    		//Create the tabs at the top of our "home view"
     		TabHost myTabHost = getTabHost();
     		
+    		//Set up configuration tab
     		TabSpec myTabSpecConfig = myTabHost.newTabSpec("configTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
     		myTabSpecConfig.setIndicator("Configure", getResources().getDrawable(R.drawable.ic_menu_preferences));
     		myTabSpecConfig.setContent(R.id.config_table);
     		myTabHost.addTab(myTabSpecConfig);
     		
+    		//Set up file viewer tab
     		TabSpec myTabSpecFIleViewer = myTabHost.newTabSpec("fileViewerTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
     		myTabSpecFIleViewer.setIndicator("File Viewer", getResources().getDrawable(R.drawable.ic_menu_view));
     		myTabSpecFIleViewer.setContent(R.id.file_viewer);
     		myTabHost.addTab(myTabSpecFIleViewer);
     		
+    		//Set up Help/About tab
     		TabSpec myTabSpecHelpAbout = myTabHost.newTabSpec("helpAboutTabSpec");//.setIndicator("Configure").setContent(R.id.config_table);
     		myTabSpecHelpAbout.setIndicator("Help-About", getResources().getDrawable(R.drawable.ic_menu_info_details));
     		myTabSpecHelpAbout.setContent(R.id.help_about);
@@ -107,7 +107,7 @@ public class GappyAndroidActivity extends TabActivity
 					fileView	= (TextView)findViewById(R.id.file_view);
 			
 			path.setText(filePath);
-			//updateReceiver();
+		
 			pathGo.setOnClickListener(onPathGoClick);
 			pathBrowse.setOnClickListener(onPathBrowse);
 			
@@ -143,7 +143,7 @@ public class GappyAndroidActivity extends TabActivity
 			//Launch FileBrowser as another view vice a new Activity, pass parameter to only allow files
 			hideKeyboard(view);
 			
-			//guiBrowse(true)
+			//Want to open a file to view = true
 			sendToFileBrowser(true);
 		}
     	
@@ -208,7 +208,6 @@ public class GappyAndroidActivity extends TabActivity
 		if (openTheFile)
 		{
 			startActivityForResult(startFileBrowserIntent, GET_VIEW_FILE);
-				
 		}
 		else
 		{
@@ -221,25 +220,25 @@ public class GappyAndroidActivity extends TabActivity
 	    // See which child activity is calling us back.
 	    switch (requestCode) {
 	        case GET_NEW_PATH:
-	            // This is the standard resultCode that is sent back if the
-	            // activity crashed or didn't doesn't supply an explicit result.
+
 	            if (resultCode == RESULT_CANCELED){
 	                //Do nothing
 	            } 
-	            else {
+	            else 
+	            {
 	                Bundle result = data.getExtras();
 	                
 	                filePath = result.getString(FILE_PATH);
 	                path.setText(filePath);
 	                
+	                //Update preference file with new path
 	    			editor.putString(PATH, filePath);
 	    			editor.commit();
-	    			//fileName = file.getText().toString();
 	            }
 	            break;
 	            
 	        case GET_VIEW_FILE:
-	            if (resultCode == RESULT_CANCELED){//
+	            if (resultCode == RESULT_CANCELED){
 	                //Do nothing
 	            } 
 	            else {
@@ -248,17 +247,12 @@ public class GappyAndroidActivity extends TabActivity
 	                fileContents = result.getString(FILE_CONTENT);
 	                
 	                fileView.setText(fileContents);
-	                //filePath = result.getString(FILE_PATH);
-	                //path.setText(filePath);
-	                
-	    			//editor.putString(PATH, filePath);
-	    			//editor.commit();
-	                //TODO Get the file view mechanism straightened out, are we passing a FIle or a String read from File in FileBrowser?
-	    			//fileName = file.getText().toString();
+
 	                fileName = result.getString(FILE_ABSOLUTE_PATH);
+	                
 	                file.setText(fileName);
 	            }
-	        default:
+	        default://TODO Make sure we using this defalt correctly, I think it's window dressing right now
 	            break;
 	    }
 	}

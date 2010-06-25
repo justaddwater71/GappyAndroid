@@ -5,48 +5,40 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-//import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-//import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
-//import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FileBrowser extends Activity {
-	//TODO Add Cancel button to file browser
 	//TODO Remove Select Button from FileBrowser View when selecting a File to view
+	//TODO Try to make Select and Cancel Button sit side by side
+	//TODO Straighten out the inconsisten Tab setting in this whole project.  Started with Tab=5, now it's Tab=2.  I like 5 better.
     //Data Members
-		//guiBrowse
 		private		File 			currentDirectory;
 		private		ListView listView;
 		private		TextView browsePath;
-		private		String		filePath; //TODO Need to get this from the Activity Preference File
-		private		String		fileContents;//TODO Need to integrate this into GappyAndroidActivity as a return value;
-		private		EditText 	path;
+		private		String		filePath; 
+		private		String		fileContents;
+		//private		EditText 	path;
 		private		String		fileName = "";
 		private		boolean	openFile;
 		
-		//Config file
-		//TODO Ensure this reads the same preference file as GappyAndroidActivity or this is all a bust.
-		//final static String PREF_FILE = "preferenceFile";
-		//final static String PATH = "filePath";
-		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
+		//TODO Get constant values from res files vice hard coded into program
 		private final String FILE_PATH 			= "FILE_PATH"; //getString(R.string.file_path);
 		private final String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
 		private final String FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
 		private	final String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
+		
 		//Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -58,7 +50,7 @@ public class FileBrowser extends Activity {
         
         filePath = extras.getString(FILE_PATH);
         
-        path		= (EditText)findViewById(R.id.path);
+        //path		= (EditText)findViewById(R.id.path);
         
         currentDirectory = new File(filePath);
         
@@ -73,27 +65,33 @@ public class FileBrowser extends Activity {
             
             listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, fileNames));
             
-            if (openFile)
-            {
-            	listView.setOnItemClickListener(onOpenListClick);
-            }
-            else
-            {
-            	listView.setOnItemClickListener(onListClick);
-            }
-            
-            //If the user needs to go "up" the directory, here is the button to do it
             Button up = (Button)findViewById(R.id.up);
             Button select = (Button)findViewById(R.id.select);
             Button cancel = (Button)findViewById(R.id.cancel);
             
             up.setOnClickListener(onUpClick);
-            select.setOnClickListener(onSelectClick);
+            
             cancel.setOnClickListener(onCancelClick);
+            
+            if (openFile)
+            {
+            	listView.setOnItemClickListener(onOpenListClick);
+            	select.setTextColor(R.color.address_background);
+            }
+            else
+            {
+            	listView.setOnItemClickListener(onListClick);
+            	select.setOnClickListener(onSelectClick);
+            }
+            
+           
+            
+
             
             //Keep updating the address location
             browsePath = (TextView)findViewById(R.id.browse_path);
             browsePath.setText(filePath);
+            
             
     }
     
@@ -101,7 +99,6 @@ public class FileBrowser extends Activity {
     {
 
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			Intent resultIntent = new Intent();
 			
 			setResult(RESULT_CANCELED, resultIntent);
@@ -113,24 +110,17 @@ public class FileBrowser extends Activity {
     
     private Button.OnClickListener onSelectClick = new Button.OnClickListener()
     {
-
-    	//TODO Ensure onSelectClick provides a directory and onItemClick provides a FILE, when appropriate
     	
 		public void onClick(View v) 
 		{
-			//path.setText(currentDirectory.getAbsolutePath());
 			filePath=currentDirectory.getAbsolutePath();
-			//editor.putString(PATH, filePath);
-			//editor.commit();
 			fileName="";
 			fileContents="";
 			
-			//mainView();//TODO This is where the return
-			
+			//Return fileContents to GappyAndroidActivity along with the full path and name of the file being viewed
 			Intent resultIntent = new Intent();
 			
 			Bundle results = new Bundle();
-			//Bundle results = resultIntent.getExtras();
 			
 			results.putString(FILE_PATH, filePath);
 			
@@ -279,17 +269,6 @@ public class FileBrowser extends Activity {
 		
 		return fileOnly;
 	}
-	
-	/*private void hideKeyboard(View view)
-	{
-		
-		 * Below hide-keyboard code copied from
-		 * http://stackoverflow.com/questions/1109022/how-to-close-hide-the-android-soft-keyboard
-		 
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
-        //End copy from stackoverflow
-	}*/
     
 	private OnItemClickListener onOpenListClick = new OnItemClickListener()
 	{
@@ -303,7 +282,6 @@ public class FileBrowser extends Activity {
 	{	
 		String localFileName = (String)listView.getItemAtPosition(position);
 		String currentLine ="";
-		
 		
 		File tempFile = new File(currentDirectory.getAbsolutePath() + "/" + localFileName);
 		
@@ -369,16 +347,10 @@ public class FileBrowser extends Activity {
 					setResult(RESULT_OK, resultIntent);
 					
 					finish();
-					//Update the fields for the main view
-					//TODO Update these to use preference file insead
-					//path.setText(currentDirectory.getAbsolutePath());
+
 					filePath=currentDirectory.getAbsolutePath();
-					//editor.putString(PATH, filePath);
-					//editor.commit();//TODO Really need to make an updatePath method if the receiver thing works
+
 					fileName=tempFile.getName();
-					
-					//Go back to the mainview
-					//mainView();//TODO FIX THIS: This is where the return will go;
 					
 				} 
 				catch (FileNotFoundException e) 
@@ -397,7 +369,6 @@ public class FileBrowser extends Activity {
 					.setMessage("FIle Not Found")
 					.setPositiveButton("OK", fileButtonListener)
 					.show();
-					//e.printStackTrace();
 				}
 				catch (IOException i)
 				{
