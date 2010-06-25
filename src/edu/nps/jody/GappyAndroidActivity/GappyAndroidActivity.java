@@ -31,8 +31,8 @@ public class GappyAndroidActivity extends TabActivity
 {
 	//Data Members
 		//Config file
-		private final String PREF_FILE 	= getString(R.string.pref_file);
-		private final String PATH 			= getString(R.string.path);
+		private final String PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
+		private final String PATH 			= "PATH";//getString(R.string.path);
 		
 		//GappyAndroid
 		private			 String		 filePath 			= "/";
@@ -47,11 +47,12 @@ public class GappyAndroidActivity extends TabActivity
 		private			TextView fileView;
 		
 		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
-		private			final String 	FILE_PATH = getString(R.string.file_path);//"FILE_PATH";
-		private			final int 		GET_NEW_PATH = R.raw.get_new_path; //=0;
-		private			final int 		GET_VIEW_FILE = R.raw.get_view_file;
-		private			final String 	FILE_OPEN = getString(R.string.file_open);
-		private			final String	FILE_CONTENT = getString(R.string.file_content);
+		private			final String 	FILE_PATH = "FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
+		private			final int 		GET_NEW_PATH = 0;//R.raw.get_new_path; //=0;
+		private			final int 		GET_VIEW_FILE = 1;//R.raw.get_view_file;
+		private			final String 	FILE_OPEN ="FILE_OPEN"; // getString(R.string.file_open);
+		private			final String	FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
+		private			final String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
 		private			SharedPreferences pref;
 		private			SharedPreferences.Editor editor;
 		
@@ -190,7 +191,7 @@ public class GappyAndroidActivity extends TabActivity
         //End copy from stackoverflow
 	}
 	
-	private void sendToFileBrowser(boolean directory)
+	private void sendToFileBrowser(boolean openTheFile)
 	{
 		
 		Intent		startFileBrowserIntent = new Intent(GappyAndroidActivity.this, FileBrowser.class);
@@ -199,17 +200,18 @@ public class GappyAndroidActivity extends TabActivity
 		
 		startFileBrowserBundle.putString(FILE_PATH, filePath);
 		
-		startFileBrowserBundle.putBoolean(FILE_OPEN, directory);
+		startFileBrowserBundle.putBoolean(FILE_OPEN, openTheFile);
 		
 		startFileBrowserIntent.putExtras(startFileBrowserBundle);
 		
-		if (directory)
+		if (openTheFile)
 		{
-				startActivityForResult(startFileBrowserIntent, GET_NEW_PATH);
+			startActivityForResult(startFileBrowserIntent, GET_VIEW_FILE);
+				
 		}
 		else
 		{
-			startActivityForResult(startFileBrowserIntent, GET_VIEW_FILE);
+			startActivityForResult(startFileBrowserIntent, GET_NEW_PATH);
 		}
 	}
     
@@ -231,12 +233,12 @@ public class GappyAndroidActivity extends TabActivity
 	                
 	    			editor.putString(PATH, filePath);
 	    			editor.commit();
-	    			fileName = file.getText().toString();
+	    			//fileName = file.getText().toString();
 	            }
 	            break;
 	            
 	        case GET_VIEW_FILE:
-	            if (resultCode == RESULT_CANCELED){
+	            if (resultCode == RESULT_CANCELED){//
 	                //Do nothing
 	            } 
 	            else {
@@ -244,13 +246,16 @@ public class GappyAndroidActivity extends TabActivity
 	                
 	                fileContents = result.getString(FILE_CONTENT);
 	                
+	                fileView.setText(fileContents);
 	                //filePath = result.getString(FILE_PATH);
 	                //path.setText(filePath);
 	                
 	    			//editor.putString(PATH, filePath);
 	    			//editor.commit();
 	                //TODO Get the file view mechanism straightened out, are we passing a FIle or a String read from File in FileBrowser?
-	    			fileName = file.getText().toString();
+	    			//fileName = file.getText().toString();
+	                fileName = result.getString(FILE_ABSOLUTE_PATH);
+	                file.setText(fileName);
 	            }
 	        default:
 	            break;

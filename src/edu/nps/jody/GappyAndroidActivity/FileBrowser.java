@@ -41,9 +41,10 @@ public class FileBrowser extends Activity {
 		//final static String PREF_FILE = "preferenceFile";
 		//final static String PATH = "filePath";
 		//public static final String ACTION_UPDATE_PATH = "edu.nps.jody.intent.custom.ACTION_UPDATE_PATH";
-		public final String FILE_PATH = getString(R.string.file_path);
-		public final String FILE_OPEN = getString(R.string.file_open);
-		private final String FILE_CONTENT = getString(R.string.file_content);
+		private final String FILE_PATH 			= "FILE_PATH"; //getString(R.string.file_path);
+		private final String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
+		private final String FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
+		private	final String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
 		//Constructor
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -168,7 +169,14 @@ public class FileBrowser extends Activity {
 	{
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 		{
+			if (openFile)
+			{
+				browseOpenTo(position);
+			}
+			else
+			{
 				browseTo(position);
+			}
 		}
 	};
     
@@ -227,11 +235,18 @@ public class FileBrowser extends Activity {
 				}
 			};
 			
-			new AlertDialog.Builder(this)
-				.setTitle("File Selected!")
-				.setMessage("That is not a directory")
-				.setPositiveButton("OK", fileButtonListener)
-				.show();
+			if (openFile)
+			{
+				browseOpenTo(position);
+			}
+			else
+			{
+				new AlertDialog.Builder(this)
+					.setTitle("File Selected!")
+					.setMessage("That is not a directory")
+					.setPositiveButton("OK", fileButtonListener)
+					.show();
+			}
 		}
 	}
 	
@@ -324,7 +339,18 @@ public class FileBrowser extends Activity {
 						fileContents = fileContents.concat(currentLine + "\n");
 					}
 					
+					Bundle results = new Bundle();
 					
+					results.putString(FILE_CONTENT, fileContents);
+					results.putString(FILE_ABSOLUTE_PATH, tempFile.getAbsolutePath());
+					
+					Intent resultIntent = new Intent();
+					
+					resultIntent.putExtras(results);
+					
+					setResult(RESULT_OK, resultIntent);
+					
+					finish();
 					//Update the fields for the main view
 					//TODO Update these to use preference file insead
 					//path.setText(currentDirectory.getAbsolutePath());
