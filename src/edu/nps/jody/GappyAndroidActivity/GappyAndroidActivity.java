@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 //import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -30,8 +31,17 @@ import android.widget.TabHost.TabSpec;
 public class GappyAndroidActivity extends TabActivity 
 {
 	//TODO Add actual version number to package
-	//TODO Need to ensure that "Go" Button functionality is not completely wrecked after moving FIleBrowser out to its own Activity
+	/*TODO Need to ensure that "Go" Button functionality is not completely wrecked after moving FIleBrowser out to its own Activity
+	 * 				- Go Button does not verify existence of directory for path
+	 * 				- Go Button on FileViewer is updating FieView with pseudo path info vice showing file
+	 * 				- Bad path in pathView causes FileBrowser to crash
+	 * 				- Need general purpose path correctness check, that's gonna suck a bit
+	 */
 	//TODO Read finals from res files vice hard coding in
+	//TODO Add SMSReceiver controller to config page
+	//TODO Add maxGap controller to config page
+	//TODO Add OSB/GB switch to config page
+	
 	//Data Members
 		//Gappy Android Data Members
 		private final 	String 		PATH 			= "PATH";//getString(R.string.path);
@@ -96,6 +106,8 @@ public class GappyAndroidActivity extends TabActivity
     		
     		myTabHost.setCurrentTab(0);
     		
+    		ToggleButton smsReceiver = (ToggleButton)findViewById(R.id.sms_receiver_toggle);
+    		
 					path		= (EditText)findViewById(R.id.path);
 			Button		pathGo		= (Button)findViewById(R.id.path_go);
 			Button		pathBrowse	= (Button)findViewById(R.id.path_browse);
@@ -106,8 +118,9 @@ public class GappyAndroidActivity extends TabActivity
 			
 					fileView	= (TextView)findViewById(R.id.file_view);
 			
+			smsReceiver.setOnClickListener(onSMSReceiverClicked);
+					
 			path.setText(filePath);
-		
 			pathGo.setOnClickListener(onPathGoClick);
 			pathBrowse.setOnClickListener(onPathBrowse);
 			
@@ -117,6 +130,17 @@ public class GappyAndroidActivity extends TabActivity
 			
 			fileView.setText(fileContents);
     }
+    
+    private ToggleButton.OnClickListener onSMSReceiverClicked = new ToggleButton.OnClickListener()
+    {
+
+		public void onClick(View v) 
+		{
+			// TODO Come up with a miracle to enable and disable a BroadcastReceiver
+			
+		}
+    	
+    };
     
     private Button.OnClickListener onPathBrowse = new Button.OnClickListener()
     {

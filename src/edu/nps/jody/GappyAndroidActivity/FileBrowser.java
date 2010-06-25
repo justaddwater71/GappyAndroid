@@ -20,9 +20,8 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FileBrowser extends Activity {
-	//TODO Remove Select Button from FileBrowser View when selecting a File to view
 	//TODO Try to make Select and Cancel Button sit side by side
-	//TODO Straighten out the inconsisten Tab setting in this whole project.  Started with Tab=5, now it's Tab=2.  I like 5 better.
+	//TODO Straighten out the inconsistent Tab setting in this whole project.  Started with Tab=5, now it's Tab=2.  I like 5 better.
     //Data Members
 		private		File 			currentDirectory;
 		private		ListView listView;
@@ -346,12 +345,11 @@ public class FileBrowser extends Activity {
 					
 					setResult(RESULT_OK, resultIntent);
 					
-					finish();
-
 					filePath=currentDirectory.getAbsolutePath();
 
 					fileName=tempFile.getName();
 					
+					finish();
 				} 
 				catch (FileNotFoundException e) 
 				{

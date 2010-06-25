@@ -27,14 +27,22 @@
 	 			android:layout_height="fill_parent"
 	 		>
 	 			<TableRow>
-	 				<RelativeLayout
-	 					android:id="@+id/sms_receiver_on"
-	 					android:layout_width="fill_parent"
-	 					android:layout_height="wrap_content"
-	 				>
-	 				</RelativeLayout>
+ 					<TextView
+ 						android:id="@+id/sms_receiver_toggle_label"
+ 						android:layout_width="wrap_content"
+ 						android:layout_height="wrap_content"
+ 						android:text="SMS_Receiver"
+ 					/>
 	 			</TableRow>
 	 			
+	 			<TableRow>
+ 					<ToggleButton
+ 						android:id="@+id/sms_receiver_toggle"
+ 						android:layout_width="wrap_content"
+ 						android:layout_height="wrap_content"
+ 					/>
+				</TableRow>
+
 	 			<TableRow>
 		    	<TextView
 		    		android:text="Path"
