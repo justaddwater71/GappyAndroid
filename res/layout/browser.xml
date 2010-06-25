@@ -43,6 +43,16 @@
 				android:layout_height="fill_parent"
 				android:background="@color/list_background"
 			>
+			
+				<Button
+					android:id="@+id/cancel"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:text="Cancel"
+					android:textStyle="bold"
+					android:layout_alignParentBottom="true"
+					android:layout_marginTop="5sp"
+				/>	
 	
 				<Button
 					android:id="@+id/select"
@@ -50,8 +60,7 @@
 					android:layout_height="wrap_content"
 					android:text="Select"
 					android:textStyle="bold"
-					android:layout_alignParentBottom="true"
-					android:layout_marginTop="5sp"
+					android:layout_above="@id/cancel"
 				/>
 				
 				<ListView

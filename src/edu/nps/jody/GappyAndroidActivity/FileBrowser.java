@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FileBrowser extends Activity {
+	//TODO Add Cancel button to file browser
+	//TODO Remove Select Button from FileBrowser View when selecting a File to view
     //Data Members
 		//guiBrowse
 		private		File 			currentDirectory;
@@ -83,15 +85,31 @@ public class FileBrowser extends Activity {
             //If the user needs to go "up" the directory, here is the button to do it
             Button up = (Button)findViewById(R.id.up);
             Button select = (Button)findViewById(R.id.select);
+            Button cancel = (Button)findViewById(R.id.cancel);
             
             up.setOnClickListener(onUpClick);
             select.setOnClickListener(onSelectClick);
+            cancel.setOnClickListener(onCancelClick);
             
             //Keep updating the address location
             browsePath = (TextView)findViewById(R.id.browse_path);
             browsePath.setText(filePath);
             
     }
+    
+    private Button.OnClickListener onCancelClick = new Button.OnClickListener()
+    {
+
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			Intent resultIntent = new Intent();
+			
+			setResult(RESULT_CANCELED, resultIntent);
+			
+			finish();
+		}
+    	
+    };
     
     private Button.OnClickListener onSelectClick = new Button.OnClickListener()
     {

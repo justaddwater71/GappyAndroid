@@ -29,6 +29,7 @@ import android.widget.TabHost.TabSpec;
 
 public class GappyAndroidActivity extends TabActivity 
 {
+	//TODO Add actual version number to package
 	//Data Members
 		//Config file
 		private final String PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
