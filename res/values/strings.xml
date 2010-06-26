@@ -4,13 +4,21 @@
     <string name="sms_receiver">SMS Receiver</string>   
     <string name="app_name">Gappy Android Activity</string>
 	
-<string name="file_browser">File Browser</string>
-<string name="file_path">&quot;FILE_PATH&quot;</string>
-<string name="get_path">GET_PATH</string>
-<string name="pref_file">preferenceFile</string>
-<string name="path">filePath</string>
-<string name="file_open">FILE_OPEN</string>
-
-<string name="file_content">FILE_CONTENT</string>
+	<string name="file_browser">File Browser</string>
+	<string name="file_path">&quot;FILE_PATH&quot;</string>
+	<string name="get_path">GET_PATH</string>
+	<string name="pref_file">preferenceFile</string>
+	<string name="path">filePath</string>
+	<string name="file_open">FILE_OPEN</string>
+	
+	<string name="file_content">FILE_CONTENT</string>
+	
+	<string-array name="osb_max_gap">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+	</string-array>
 </resources>
 

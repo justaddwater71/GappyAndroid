@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FileBrowser extends Activity {
-	//TODO Try to make Select and Cancel Button sit side by side
 	//TODO Straighten out the inconsistent Tab setting in this whole project.  Started with Tab=5, now it's Tab=2.  I like 5 better.
     //Data Members
 		private		File 			currentDirectory;
@@ -33,9 +32,9 @@ public class FileBrowser extends Activity {
 		private		boolean	openFile;
 		
 		//TODO Get constant values from res files vice hard coded into program
-		private final String FILE_PATH 			= "FILE_PATH"; //getString(R.string.file_path);
+		private final String FILE_PATH 				= "FILE_PATH";
 		private final String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
-		private final String FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
+		private final String FILE_CONTENT 	= "FILE_CONTENT"; //getString(R.string.file_content);
 		private	final String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
 		
 		//Constructor
