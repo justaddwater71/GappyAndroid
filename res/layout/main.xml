@@ -29,7 +29,7 @@
 	 			<TableRow>
  					<TextView
  						android:id="@+id/sms_receiver_toggle_label"
- 						android:layout_width="wrap_content"
+ 						android:layout_width="fill_parent"
  						android:layout_height="wrap_content"
  						android:text="SMS_Receiver"
  					/>
@@ -38,7 +38,7 @@
 	 			<TableRow>
  					<ToggleButton
  						android:id="@+id/sms_receiver_toggle"
- 						android:layout_width="wrap_content"
+ 						android:layout_width="fill_parent"
  						android:layout_height="wrap_content"
  					/>
 				</TableRow>
@@ -100,6 +100,23 @@
  					/>
 	 			</TableRow>
 	 			
+	 			<TableRow>
+	 				<TextView
+	 					android:id="@+id/feature_type_label"
+	 					android:layout_width="fill_parent"
+	 					android:layout_height="wrap_content"
+	 					android:text="Feature Type"
+	 				/>
+	 			</TableRow>
+	 			
+	 			<TableRow>
+	 				<Spinner
+	 					android:id="@+id/feature_type_spinner"
+	 					android:layout_width="fill_parent"
+	 					android:layout_height="wrap_content"
+	 					android:entries="@array/feature_array"
+	 				/>
+	 			</TableRow>
 	 		</TableLayout>
 	 	
 		<TableLayout

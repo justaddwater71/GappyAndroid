@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
 public class SMS_Manager 
 {
 	//Constructors
@@ -40,8 +39,7 @@ public class SMS_Manager
 	 * 		OR BOTH
 	 */
 	
-	
-	public static void processSMS(String SMS, int maxGap, String path) throws IOException
+	public static void processSMS(String SMS, int maxGap, String path, int featureType) throws IOException
 	{
 		/*
 		 * Not assuming a standard feature set for this.  Using that would
@@ -70,7 +68,7 @@ public class SMS_Manager
 		path = validatePath(path);
 
 		//Make HashMap from gappy bigrams of current message
-		HashMap<String, Integer> hashMap = GBMaker.textToGBMap(textMSG, maxGap, fileToMap(phoneNumber, maxGap, path));
+		HashMap<String, Integer> hashMap = FeatureMaker.textToFeatureMap(textMSG, maxGap, fileToMap(phoneNumber, maxGap, path), featureType);
 		
 		mapToFile(phoneNumber, maxGap, hashMap, path);
 	}

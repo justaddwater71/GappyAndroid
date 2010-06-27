@@ -20,5 +20,10 @@
 		<item>3</item>
 		<item>4</item>
 	</string-array>
+	
+	<string-array name="feature_array">
+		<item>Orthogonal Sparse Bigram</item>
+		<item>Gappy Bigram</item>
+	</string-array>
 </resources>
 

@@ -36,10 +36,12 @@ public class SmsReceiver extends BroadcastReceiver
                 
                 SharedPreferences pref = context.getSharedPreferences("preferenceFile", 0);
                 String path = pref.getString("filePath", "/");
+                int featureType = pref.getInt("FEATURE_TYPE", FeatureMaker.FEATURE_OSB);
+                int maxGap = pref.getInt("MAX_GAP", 4);
                 
                 try
                 {
-                SMS_Manager.processSMS(str, 4, path);
+                	SMS_Manager.processSMS(str, maxGap, path, featureType);
                 }
                 catch (IOException e)
                 {

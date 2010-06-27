@@ -1,46 +1,33 @@
 package edu.nps.jody.GappyAndroidActivity;
 
-//import java.io.BufferedReader;
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.io.IOException;
-//import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
-//import android.content.DialogInterface;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-//import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-//import android.widget.AdapterView;
-//import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.Spinner;
 import android.widget.ToggleButton;
-//import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-//import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TabHost.TabSpec;
 
 public class GappyAndroidActivity extends TabActivity 
 {
 	//TODO Add actual version number to package
-	/*TODO Need to ensure that "Go" Button functionality is not completely wrecked after moving FIleBrowser out to its own Activity
+	/*FIXME Need to ensure that "Go" Button functionality is not completely wrecked after moving FIleBrowser out to its own Activity
 	 * 				- Go Button does not verify existence of directory for path
 	 * 				- Go Button on FileViewer is updating FieView with pseudo path info vice showing file
 	 * 				- Bad path in pathView causes FileBrowser to crash
 	 * 				- Need general purpose path correctness check, that's gonna suck a bit
 	 */
 	//TODO Read finals from res files vice hard coding in
-	//TODO Add SMSReceiver controller to config page
-	//TODO Add maxGap controller to config page
-	//TODO Add OSB/GB switch to config page
+	//FIXME Make OSB/GB selector actually DO something
+	//FIXME Make the MaxGap selector actually DO something
 	
 	//Data Members
 		//Gappy Android Data Members
@@ -51,12 +38,16 @@ public class GappyAndroidActivity extends TabActivity
 		private				EditText	file;
 		private				String 		fileContents 	= "";
 		private				TextView fileView;
+		private				Spinner	maxGapSpinner;
+		private				Spinner	featureTypeSpinner;
 		private	final 	String 		FILE_PATH = "FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
 		private	final 	int 			GET_NEW_PATH = 0;//R.raw.get_new_path; //=0;
 		private	final 	int 			GET_VIEW_FILE = 1;//R.raw.get_view_file;
 		private	final 	String 		FILE_OPEN ="FILE_OPEN"; // getString(R.string.file_open);
 		private	final 	String		FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
 		private	final 	String		FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
+		private final	String		MAX_GAP = "MAX_GAP";
+		private final	String		FEATURE_TYPE = "FEATURE TYPE";
 		
 		//Preference File Data Members
 		private final 	String 		PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
@@ -118,6 +109,10 @@ public class GappyAndroidActivity extends TabActivity
 			
 					fileView	= (TextView)findViewById(R.id.file_view);
 			
+					maxGapSpinner = (Spinner)findViewById(R.id.max_gap_spinner);
+					
+					featureTypeSpinner = (Spinner)findViewById(R.id.feature_type_spinner);
+					
 			smsReceiver.setOnClickListener(onSMSReceiverClicked);
 					
 			path.setText(filePath);
@@ -129,7 +124,63 @@ public class GappyAndroidActivity extends TabActivity
 			fileBrowse.setOnClickListener(onFileBrowse);
 			
 			fileView.setText(fileContents);
+			
+			maxGapSpinner.setOnItemSelectedListener(onMaxGapSpinnerItemSelected);
+			
+			featureTypeSpinner.setOnItemSelectedListener(onFeatureTypeSpinnerItemSelected);
     }
+    
+    private Spinner.OnItemSelectedListener onFeatureTypeSpinnerItemSelected = new Spinner.OnItemSelectedListener()
+    {
+
+		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+		{
+			//Get the String value of the item selected in the spinner
+			
+			//Put this into preferences to be read by other classes for processing SMS messages
+				editor.putInt(FEATURE_TYPE, position);
+				editor.commit();
+		}
+
+
+		public void onNothingSelected(AdapterView<?> arg0) 
+		{
+			// Do nothing
+			return;
+		}
+    	
+    };
+    
+    private Spinner.OnItemSelectedListener onMaxGapSpinnerItemSelected = new Spinner.OnItemSelectedListener()
+    {
+		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+		{
+			//Get the string value out of the item selected in the spinner
+			String selected = (String)maxGapSpinner.getItemAtPosition(position);
+			if (selected.equalsIgnoreCase(""))
+			{
+				onNothingSelected(parentView);
+			}
+			else
+			{
+				//int spinnerSelection = Integer.getInteger(selected);
+				int spinnerSelection;
+				
+				spinnerSelection = Integer.parseInt(selected);
+				
+				//Put the integer represented by the String gotten above into the prefs file as an integer
+				editor.putInt(MAX_GAP, spinnerSelection);
+				editor.commit();
+			}
+			
+		}
+
+		public void onNothingSelected(AdapterView<?> parentView) {
+			// FIXME Should this just be a //Do nothing ?
+			return;
+		}
+    	
+    };
     
     private ToggleButton.OnClickListener onSMSReceiverClicked = new ToggleButton.OnClickListener()
     {
@@ -276,7 +327,7 @@ public class GappyAndroidActivity extends TabActivity
 	                
 	                file.setText(fileName);
 	            }
-	        default://TODO Make sure we using this defalt correctly, I think it's window dressing right now
+	        default://TODO Make sure we using this default correctly, I think it's window dressing right now
 	            break;
 	    }
 	}
