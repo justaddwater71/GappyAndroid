@@ -1,16 +1,22 @@
 package edu.nps.jody.GappyAndroidActivity;
 
+import java.io.IOException;
+
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.telephony.SmsMessage;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -40,6 +46,8 @@ public class GappyAndroidActivity extends TabActivity
 		private				TextView fileView;
 		private				Spinner	maxGapSpinner;
 		private				Spinner	featureTypeSpinner;
+		private				ToggleButton smsReceiver;
+		private				IntentFilter		smsIntentFilter;
 		private	final 	String 		FILE_PATH = "FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
 		private	final 	int 			GET_NEW_PATH = 0;//R.raw.get_new_path; //=0;
 		private	final 	int 			GET_VIEW_FILE = 1;//R.raw.get_view_file;
@@ -54,6 +62,10 @@ public class GappyAndroidActivity extends TabActivity
 		private				SharedPreferences 				pref;
 		private				SharedPreferences.Editor 	editor;
 		
+		//Goofy test setup stuff for embedded receiver class
+		int maxGap = 4;
+		int featureType = 0;
+		
 	//Constructors
     /** Called when the activity is first created. */
     @Override
@@ -65,6 +77,9 @@ public class GappyAndroidActivity extends TabActivity
         super.onCreate(savedInstanceState);
         
         filePath = pref.getString(FILE_PATH, "/");
+        
+        smsIntentFilter = new IntentFilter();
+        smsIntentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
         
         mainView();
     }
@@ -97,7 +112,7 @@ public class GappyAndroidActivity extends TabActivity
     		
     		myTabHost.setCurrentTab(0);
     		
-    		ToggleButton smsReceiver = (ToggleButton)findViewById(R.id.sms_receiver_toggle);
+    							smsReceiver = (ToggleButton)findViewById(R.id.sms_receiver_toggle);
     		
 					path		= (EditText)findViewById(R.id.path);
 			Button		pathGo		= (Button)findViewById(R.id.path_go);
@@ -187,7 +202,14 @@ public class GappyAndroidActivity extends TabActivity
 
 		public void onClick(View v) 
 		{
-			// TODO Come up with a miracle to enable and disable a BroadcastReceiver
+			if (smsReceiver.isEnabled())
+			{
+				registerReceiver(SMSBroadcastReceiver, smsIntentFilter);
+			}
+			else
+			{
+				unregisterReceiver(SMSBroadcastReceiver);
+			}
 			
 		}
     	
@@ -332,5 +354,50 @@ public class GappyAndroidActivity extends TabActivity
 	            break;
 	    }
 	}
+	
+	private BroadcastReceiver SMSBroadcastReceiver = new BroadcastReceiver()
+	{
+
+		public void onReceive(Context context, Intent intent) 
+	    {
+	        //---get the SMS message passed in---
+	        Bundle bundle = intent.getExtras();        
+	        SmsMessage[] msgs = null;
+	        String str = "";            
+	       if (bundle != null)
+	        {
+	            //---retrieve the SMS message received---
+	            Object[] pdus = (Object[]) bundle.get("pdus");
+	            msgs = new SmsMessage[pdus.length];            
+	            for (int i=0; i<msgs.length; i++){
+	                msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);                
+	                str += msgs[i].getOriginatingAddress();                     
+	                str += " ";
+	                str += msgs[i].getMessageBody().toString();
+	                str += "\n";      
+	                
+	                //SharedPreferences pref = context.getSharedPreferences("PREF_FILE", 0);
+	                //String path = pref.getString("FILE_PATH", "/sdcard");
+	                //int featureType = pref.getInt("FEATURE_TYPE", FeatureMaker.FEATURE_OSB);
+	                //int maxGap = pref.getInt("MAX_GAP", 4);
+	                
+	                try
+	                {
+	                	SMS_Manager.processSMS(str, maxGap, filePath, featureType);
+	                }
+	                catch (IOException e)
+	                {
+	                	Toast.makeText(context, "That sucked", Toast.LENGTH_LONG).show();
+	                }
+	            
+	           //componentName =  intent.getComponent().toShortString();
+	            //---display the new SMS message---
+	            //Toast.makeText(context, componentName, Toast.LENGTH_LONG).show();
+	            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+	    	   }
+	        }                         
+	    }
+		
+	};
 	
 }

@@ -5,15 +5,16 @@ import java.io.IOException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+//import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
  
 public class SmsReceiver extends BroadcastReceiver
 {
-	//String componentName;
-	//String path;
+	String path = "/sdcard";
+	int featureType = 0;
+	int maxGap = 4;
 	
     @Override
     public void onReceive(Context context, Intent intent) 
@@ -34,10 +35,10 @@ public class SmsReceiver extends BroadcastReceiver
                 str += msgs[i].getMessageBody().toString();
                 str += "\n";      
                 
-                SharedPreferences pref = context.getSharedPreferences("PREF_FILE", 0);
-                String path = pref.getString("FILE_PATH", "/sdcard");
-                int featureType = pref.getInt("FEATURE_TYPE", FeatureMaker.FEATURE_OSB);
-                int maxGap = pref.getInt("MAX_GAP", 4);
+                //SharedPreferences pref = context.getSharedPreferences("PREF_FILE", 0);
+                //String path = pref.getString("FILE_PATH", "/sdcard");
+                //int featureType = pref.getInt("FEATURE_TYPE", FeatureMaker.FEATURE_OSB);
+                //int maxGap = pref.getInt("MAX_GAP", 4);
                 
                 try
                 {
