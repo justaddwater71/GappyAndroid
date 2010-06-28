@@ -290,6 +290,7 @@ public class GappyAndroidActivity extends TabActivity
 		}
 	}
     
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 	    // See which child activity is calling us back.

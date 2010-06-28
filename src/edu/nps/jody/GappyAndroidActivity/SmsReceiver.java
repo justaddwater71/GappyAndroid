@@ -34,8 +34,8 @@ public class SmsReceiver extends BroadcastReceiver
                 str += msgs[i].getMessageBody().toString();
                 str += "\n";      
                 
-                SharedPreferences pref = context.getSharedPreferences("preferenceFile", 0);
-                String path = pref.getString("filePath", "/");
+                SharedPreferences pref = context.getSharedPreferences("PREF_FILE", 0);
+                String path = pref.getString("FILE_PATH", "/sdcard");
                 int featureType = pref.getInt("FEATURE_TYPE", FeatureMaker.FEATURE_OSB);
                 int maxGap = pref.getInt("MAX_GAP", 4);
                 

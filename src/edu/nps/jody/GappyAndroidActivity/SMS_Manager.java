@@ -128,7 +128,7 @@ public class SMS_Manager
 		
 		while (mapIterator.hasNext())
 		{
-			mapKey = (String)mapIterator.next();
+			mapKey = mapIterator.next();
 			//Convoluted printing of mapKey (word1 word2 gap + " " + count gotten by getting value assigned to mapKey
 			printWriter.println(mapKey + " " + hashMap.get(mapKey).hashCode());
 		}

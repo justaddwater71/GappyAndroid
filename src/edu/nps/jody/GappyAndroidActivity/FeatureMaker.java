@@ -11,8 +11,8 @@ public class FeatureMaker
 		//Static class. No constructors.
 	
 	//Data Members
-	public static final int FEATURE_GB 		= 0;
-	public static final int FEATURE_OSB 	= 1;
+	public static final int FEATURE_OSB 		= 0;
+	public static final int FEATURE_GB 	= 1;
 	
 	//Accessors
 		//Static class. No Accessors.
@@ -156,12 +156,12 @@ public class FeatureMaker
 		
 		switch (featureType)
 		{
-			case FEATURE_OSB:
+			case FEATURE_OSB: //=0
 			
 				return parseOSB(cleanTextMSG, maxGap);
 			
 			
-			case FEATURE_GB:
+			case FEATURE_GB: //=1
 	
 				return parseGB(cleanTextMSG, maxGap);
 			
@@ -178,22 +178,22 @@ public class FeatureMaker
 	
 	public static HashMap<String, Integer> textToFeatureMap(String textMSG, int maxGap, HashMap<String, Integer> hashMap,int featureType)
 	{
-		String gbArray[] = parse(cleanUp(textMSG), maxGap, featureType);
+		String featureArray[] = parse(cleanUp(textMSG), maxGap, featureType);
 		
-		for (int i = 0; i < gbArray.length; i++)
+		for (int i = 0; i < featureArray.length; i++)
 		{
 			//If the key is already there, add 1 to the value
 			//This looks WAY convoluted and uses TOO MANY lookups
 			//in the hashmap.  There has to be an iterator way
 			//to do this smartly
-			if (hashMap.containsKey(gbArray[i]))
+			if (hashMap.containsKey(featureArray[i]))
 			{
-				hashMap.put(gbArray[i], hashMap.get(gbArray[i]) + 1);
+				hashMap.put(featureArray[i], hashMap.get(featureArray[i]) + 1);
 			}
 			else
 			{
 				//Prime the entry in the hashmap with count =1
-				hashMap.put(gbArray[i], Integer.valueOf(1));
+				hashMap.put(featureArray[i], Integer.valueOf(1));
 			}
 		}
 		
