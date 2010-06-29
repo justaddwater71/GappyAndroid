@@ -1,7 +1,5 @@
 package edu.nps.jody.GappyAndroidActivity;
 
-//TODO Add OSBMaker to this class
-
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -11,7 +9,7 @@ public class FeatureMaker
 		//Static class. No constructors.
 	
 	//Data Members
-	public static final int FEATURE_OSB 		= 0;
+	public static final int FEATURE_OSB = 0;
 	public static final int FEATURE_GB 	= 1;
 	
 	//Accessors
@@ -21,6 +19,16 @@ public class FeatureMaker
 		//Static class. No mutators.
 	
 	//Data Methods
+	public static String featureTypeToLabel(int featureType)
+	{
+		HashMap<Integer, String> typeToLabel = new HashMap<Integer, String>();
+		
+		typeToLabel.put(FEATURE_OSB, "OSB");
+		typeToLabel.put(FEATURE_GB, "GB");
+		
+		return typeToLabel.get(featureType);
+	}
+	
 	public static String cleanUp(String textMSG)
 	{
 		//String cleanedString="";
@@ -95,7 +103,6 @@ public class FeatureMaker
 	
 	public static String[] parseGB(String cleanTextMSG, int maxGap)
 	{
-		//FIXME  This is NOT good code for parseGB.  This is copied directly from parseOSB.
 		//Tokenizer to parse out words (defined as characters surrounded by whitespace)
 		StringTokenizer tokenizer = new StringTokenizer(cleanTextMSG);
 		
@@ -103,7 +110,7 @@ public class FeatureMaker
 		int totalTokens = tokenizer.countTokens();
 		
 		//Determine total size of resultArray. 
-		//FIXME  Need to think out this formula for GAPPY BIGRAMS, MAY NOT BE SAME FOR OSB!
+		//FIXME  Getting null in resulting file for Gappy Bigram.  Root it out and kill it
 		int totalGB = (maxGap*(maxGap+1)/2)*totalTokens
 			- (maxGap)*(maxGap+1)*(maxGap+2)/6;
 	

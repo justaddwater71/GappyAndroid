@@ -32,8 +32,6 @@ public class GappyAndroidActivity extends TabActivity
 	 * 				- Need general purpose path correctness check, that's gonna suck a bit
 	 */
 	//TODO Read finals from res files vice hard coding in
-	//FIXME Make OSB/GB selector actually DO something
-	//FIXME Make the MaxGap selector actually DO something
 	
 	//Data Members
 		//Gappy Android Data Members
@@ -63,8 +61,8 @@ public class GappyAndroidActivity extends TabActivity
 		private				SharedPreferences.Editor 	editor;
 		
 		//Goofy test setup stuff for embedded receiver class
-		int maxGap = 4;
-		int featureType = 0;
+		int maxGap;
+		int featureType;
 		
 	//Constructors
     /** Called when the activity is first created. */
@@ -77,6 +75,8 @@ public class GappyAndroidActivity extends TabActivity
         super.onCreate(savedInstanceState);
         
         filePath = pref.getString(FILE_PATH, "/");
+        maxGap = pref.getInt(MAX_GAP, 4);
+        featureType = pref.getInt(FEATURE_TYPE, 0);
         
         smsIntentFilter = new IntentFilter();
         smsIntentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
@@ -153,6 +153,7 @@ public class GappyAndroidActivity extends TabActivity
 			//Get the String value of the item selected in the spinner
 			
 			//Put this into preferences to be read by other classes for processing SMS messages
+				featureType = position;
 				editor.putInt(FEATURE_TYPE, position);
 				editor.commit();
 		}
@@ -184,6 +185,7 @@ public class GappyAndroidActivity extends TabActivity
 				spinnerSelection = Integer.parseInt(selected);
 				
 				//Put the integer represented by the String gotten above into the prefs file as an integer
+				maxGap = spinnerSelection;
 				editor.putInt(MAX_GAP, spinnerSelection);
 				editor.commit();
 			}
@@ -191,7 +193,7 @@ public class GappyAndroidActivity extends TabActivity
 		}
 
 		public void onNothingSelected(AdapterView<?> parentView) {
-			// FIXME Should this just be a //Do nothing ?
+			// Do nothing
 			return;
 		}
     	
@@ -202,7 +204,8 @@ public class GappyAndroidActivity extends TabActivity
 
 		public void onClick(View v) 
 		{
-			if (smsReceiver.isEnabled())
+			if(smsReceiver.isChecked())
+			//if (smsReceiver.isEnabled())
 			{
 				registerReceiver(SMSBroadcastReceiver, smsIntentFilter);
 			}
@@ -387,7 +390,7 @@ public class GappyAndroidActivity extends TabActivity
 	                }
 	                catch (IOException e)
 	                {
-	                	Toast.makeText(context, "That sucked", Toast.LENGTH_LONG).show();
+	                	Toast.makeText(context, "Cannot write file to current directory.", Toast.LENGTH_LONG).show();
 	                }
 	            
 	           //componentName =  intent.getComponent().toShortString();

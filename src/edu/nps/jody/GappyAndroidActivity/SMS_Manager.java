@@ -68,9 +68,9 @@ public class SMS_Manager
 		path = validatePath(path);
 
 		//Make HashMap from gappy bigrams of current message
-		HashMap<String, Integer> hashMap = FeatureMaker.textToFeatureMap(textMSG, maxGap, fileToMap(phoneNumber, maxGap, path), featureType);
+		HashMap<String, Integer> hashMap = FeatureMaker.textToFeatureMap(textMSG, maxGap, fileToMap(phoneNumber, maxGap, FeatureMaker.featureTypeToLabel(featureType), path), featureType);
 		
-		mapToFile(phoneNumber, maxGap, hashMap, path);
+		mapToFile(phoneNumber, maxGap, FeatureMaker.featureTypeToLabel(featureType), hashMap, path);
 	}
 	
 	
@@ -96,7 +96,7 @@ public class SMS_Manager
 	
 	//I don't like how very UNgeneral the 2G is here.  I need it for 2Gram with the -maxGap to indicate
 	//gappy bigram, but this will trip me up if I expand this program.
-	public static void mapToFile(String phoneNumber, int maxGap, HashMap<String, Integer> hashMap, String path) throws IOException
+	public static void mapToFile(String phoneNumber, int maxGap, String featureTypeName, HashMap<String, Integer> hashMap, String path) throws IOException
 	{	
 		/*
 		 * According to java reference site, using a FileOutputStream with no other
@@ -109,7 +109,7 @@ public class SMS_Manager
 		*/
 		
 		//For required file output in this method
-		File file = new File(path + phoneNumber + "-" + "2G" + "-" + maxGap + ".txt");
+		File file = new File(path + phoneNumber + "-" + featureTypeName + "-" + maxGap + ".txt");
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		PrintWriter printWriter = new PrintWriter(fileOutputStream);
 
@@ -141,11 +141,11 @@ public class SMS_Manager
 		fileOutputStream.close();
 	}
 	
-	public static HashMap<String, Integer> fileToMap(String phoneNumber, int maxGap, String path) throws IOException
+	public static HashMap<String, Integer> fileToMap(String phoneNumber, int maxGap, String featureTypeName, String path) throws IOException
 	{
 		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 		
-		File file = new File(path + phoneNumber + "-" + "2G" + "-" + maxGap + ".txt");
+		File file = new File(path + phoneNumber + "-" + featureTypeName + "-" + maxGap + ".txt");
 		
 		//If this phone number already has a file, read it into the hashMap before
 		//processing the latest message

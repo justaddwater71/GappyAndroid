@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FileBrowser extends Activity {
-	//TODO Straighten out the inconsistent Tab setting in this whole project.  Started with Tab=5, now it's Tab=2.  I like 5 better.
+
     //Data Members
 		private		File 			currentDirectory;
 		private		ListView listView;
