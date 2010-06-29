@@ -260,7 +260,7 @@ public class GappyAndroidActivity extends TabActivity
 			
 			hideKeyboard(path);
             
-			fileView.setText(filePath + "/" + fileName);
+			//fileView.setText(filePath + "/" + fileName);
 		}
     	
     };
