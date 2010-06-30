@@ -1,18 +1,26 @@
 package edu.nps.jody.GappyAndroidActivity;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -230,7 +238,7 @@ public class GappyAndroidActivity extends TabActivity
 			//fileName = file.getText().toString();
 			hideKeyboard(view);
 			//guiBrowse(false);
-			sendToFileBrowser(false);
+			sendToFileBrowser(false, filePath);
 		}
     	
     };
@@ -244,7 +252,7 @@ public class GappyAndroidActivity extends TabActivity
 			hideKeyboard(view);
 			
 			//Want to open a file to view = true
-			sendToFileBrowser(true);
+			sendToFileBrowser(true, filePath);
 		}
     	
     };
@@ -253,14 +261,26 @@ public class GappyAndroidActivity extends TabActivity
     {
 		public void onClick(View v) 
 		{	
-			filePath = path.getText().toString();
-			editor.putString(PATH, filePath);
+			String tempFilePath = path.getText().toString();
+			/*editor.putString(PATH, filePath);
 			editor.commit();
-			fileName = file.getText().toString();
+			fileName = file.getText().toString();*/
+			File tempFile = new File(tempFilePath);
 			
 			hideKeyboard(path);
             
 			//fileView.setText(filePath + "/" + fileName);
+			if (tempFile.isDirectory())
+			{
+				filePath = tempFilePath;
+				editor.putString(PATH, filePath);
+				editor.commit();
+			}
+			else
+			{
+				path.setText(filePath);
+				Toast.makeText(getBaseContext(), "That is not a directory", Toast.LENGTH_LONG);
+			}
 		}
     	
     };
@@ -269,14 +289,109 @@ public class GappyAndroidActivity extends TabActivity
     {
 		public void onClick(View v) 
 		{
-			filePath = path.getText().toString();
-			editor.putString(PATH, filePath);
-			editor.commit();
-			fileName = file.getText().toString();
+			//String tempfilePath = path.getText().toString();
+			//editor.putString(PATH, filePath);
+			//editor.commit();
+			String tempfileName = file.getText().toString();
 			
 			hideKeyboard(file);
 
-			fileView.setText(filePath + "/" + fileName);
+			//fileView.setText(filePath + "/" + fileName);
+			
+			String currentLine ="";
+			
+			File tempFile = new File(tempfileName);//new File(tempfilePath + "/" + tempfileName);
+			
+			if (tempFile.isDirectory())
+			{
+				//filePath = tempfilePath;
+				//editor.putString(PATH, filePath);
+				//editor.commit();
+				
+				sendToFileBrowser(true, tempfileName);
+				return;
+			}
+			else
+			{
+				if (tempFile.canRead())
+				{
+					//filePath = path.getText().toString();
+					//editor.putString(PATH, filePath);
+					//editor.commit();
+					fileName = file.getText().toString();
+					
+					//File[] files = tempFile.listFiles();
+					//currentDirectory = tempFile;
+					//browsePath.setText(currentDirectory.getAbsolutePath());
+					
+					FileReader fileReader;
+					try 
+					{
+						fileReader = new FileReader(tempFile);
+						
+						BufferedReader bufferedReader = new BufferedReader(fileReader);
+						
+						fileContents="";
+						
+						while ((currentLine = bufferedReader.readLine()) != null)
+						{
+							fileContents = fileContents.concat(currentLine + "\n");
+						}
+						
+						fileView.setText(fileContents);
+					}
+					catch (FileNotFoundException e) 
+					{
+						Toast.makeText(getBaseContext(), "File does not exist", Toast.LENGTH_LONG);
+					} catch (IOException e) {
+						Toast.makeText(getBaseContext(), "I/O Error.  Please try later.", Toast.LENGTH_LONG);
+					}
+					
+					
+					/*if (files == null)
+					{
+						listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, dropPath(files)));
+					}
+					else
+					{
+						listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, dropPath(files)));
+					}*/
+				}
+				else
+				{
+					Toast.makeText(getBaseContext(), "Permission Denied", Toast.LENGTH_LONG);
+					
+					/*OnClickListener fileButtonListener = new OnClickListener()
+					{
+						//@Override
+						public void onClick(DialogInterface arg0, int arg1) 
+						{
+							//Do nothing
+						}
+					};
+					
+					new AlertDialog.Builder(this)
+						.setTitle("Security Notice")
+						.setMessage("Permission Denied")
+						.setPositiveButton("OK", fileButtonListener)
+						.show();*/
+				}
+
+			}
+			/*else
+			{	
+					
+						FileReader fileReader = new FileReader(tempFile);
+						BufferedReader bufferedReader = new BufferedReader(fileReader);
+						
+						fileContents="";
+						
+						while ((currentLine = bufferedReader.readLine()) != null)
+						{
+							fileContents = fileContents.concat(currentLine + "\n");
+						}
+			}*/
+					
 		}
     	
     };
@@ -292,14 +407,14 @@ public class GappyAndroidActivity extends TabActivity
         //End copy from stackoverflow
 	}
 	
-	private void sendToFileBrowser(boolean openTheFile)
+	private void sendToFileBrowser(boolean openTheFile, String startFilePath)
 	{
 		
 		Intent		startFileBrowserIntent = new Intent(GappyAndroidActivity.this, FileBrowser.class);
 		
 		Bundle startFileBrowserBundle = new Bundle();
 		
-		startFileBrowserBundle.putString(FILE_PATH, filePath);
+		startFileBrowserBundle.putString(FILE_PATH, startFilePath);
 		
 		startFileBrowserBundle.putBoolean(FILE_OPEN, openTheFile);
 		
@@ -345,16 +460,65 @@ public class GappyAndroidActivity extends TabActivity
 	            else {
 	                Bundle result = data.getExtras();
 	                
-	                fileContents = result.getString(FILE_CONTENT);
-	                
+	               // fileContents = result.getString(FILE_CONTENT);
+	               File tempFile = new File(result.getString(FILE_ABSOLUTE_PATH));
+	               String currentLine;
+	                try 
+					{
+						FileReader fileReader = new FileReader(tempFile);
+						BufferedReader bufferedReader = new BufferedReader(fileReader);
+						
+						fileContents="";
+						
+						while ((currentLine = bufferedReader.readLine()) != null)
+						{
+							fileContents = fileContents.concat(currentLine + "\n");
+						}
+					}
+						catch (FileNotFoundException e) 
+						{
+							OnClickListener fileButtonListener = new OnClickListener()
+							{
+								//@Override
+								public void onClick(DialogInterface arg0, int arg1) 
+								{
+									//Do nothing
+								}
+							};
+							
+							new AlertDialog.Builder(this)
+							.setTitle("Error!")
+							.setMessage("FIle Not Found")
+							.setPositiveButton("OK", fileButtonListener)
+							.show();
+						}
+						catch (IOException i)
+						{
+							OnClickListener fileButtonListener = new OnClickListener()
+							{
+								//@Override
+								public void onClick(DialogInterface arg0, int arg1) 
+								{
+									//Do nothing
+								}
+							};
+							
+							new AlertDialog.Builder(this)
+							.setTitle("Error!")
+							.setMessage("IO Error")
+							.setPositiveButton("OK", fileButtonListener)
+							.show();
+						}
+										
 	                fileView.setText(fileContents);
 
 	                fileName = result.getString(FILE_ABSOLUTE_PATH);
 	                
 	                file.setText(fileName);
 	            }
-	        default://TODO Make sure we using this default correctly, I think it's window dressing right now
-	            break;
+	       
+	        	default://TODO Make sure we using this default correctly, I think it's window dressing right now
+	        		break;
 	    }
 	}
 	

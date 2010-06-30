@@ -279,7 +279,7 @@ public class FileBrowser extends Activity {
 	private void browseOpenTo(int position)
 	{	
 		String localFileName = (String)listView.getItemAtPosition(position);
-		String currentLine ="";
+		//String currentLine ="";
 		
 		File tempFile = new File(currentDirectory.getAbsolutePath() + "/" + localFileName);
 		
@@ -321,7 +321,7 @@ public class FileBrowser extends Activity {
 		}
 		else
 		{	
-				try 
+				/*try 
 				{
 					FileReader fileReader = new FileReader(tempFile);
 					BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -331,11 +331,11 @@ public class FileBrowser extends Activity {
 					while ((currentLine = bufferedReader.readLine()) != null)
 					{
 						fileContents = fileContents.concat(currentLine + "\n");
-					}
+					}*/
 					
 					Bundle results = new Bundle();
 					
-					results.putString(FILE_CONTENT, fileContents);
+					//results.putString(FILE_CONTENT, fileContents);
 					results.putString(FILE_ABSOLUTE_PATH, tempFile.getAbsolutePath());
 					
 					Intent resultIntent = new Intent();
@@ -350,7 +350,7 @@ public class FileBrowser extends Activity {
 					
 					finish();
 				} 
-				catch (FileNotFoundException e) 
+				/*catch (FileNotFoundException e) 
 				{
 					OnClickListener fileButtonListener = new OnClickListener()
 					{
@@ -384,7 +384,7 @@ public class FileBrowser extends Activity {
 					.setPositiveButton("OK", fileButtonListener)
 					.show();
 				}
-		}
+		}*/
 	}
     
  }
