@@ -1,10 +1,10 @@
 package edu.nps.jody.GappyAndroidActivity;
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
+//import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,16 +26,16 @@ public class FileBrowser extends Activity {
 		private		ListView listView;
 		private		TextView browsePath;
 		private		String		filePath; 
-		private		String		fileContents;
+		//private		String		fileContents;
 		//private		EditText 	path;
-		private		String		fileName = "";
+		//private		String		fileName = "";
 		private		boolean	openFile;
 		
 		//TODO Get constant values from res files vice hard coded into program
-		private final String FILE_PATH 				= "FILE_PATH";
-		private final String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
-		private final String FILE_CONTENT 	= "FILE_CONTENT"; //getString(R.string.file_content);
-		private	final String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
+		public final static String FILE_PATH 				= "FILE_PATH";
+		public final static String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
+		//private final String FILE_CONTENT 	= "FILE_CONTENT"; //getString(R.string.file_content);
+		public final static String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
 		
 		//Constructor
     @Override
@@ -112,8 +112,8 @@ public class FileBrowser extends Activity {
 		public void onClick(View v) 
 		{
 			filePath=currentDirectory.getAbsolutePath();
-			fileName="";
-			fileContents="";
+			//fileName="";
+			//fileContents="";
 			
 			//Return fileContents to GappyAndroidActivity along with the full path and name of the file being viewed
 			Intent resultIntent = new Intent();
@@ -122,7 +122,7 @@ public class FileBrowser extends Activity {
 			
 			results.putString(FILE_PATH, filePath);
 			
-			results.putString(FILE_CONTENT, fileContents);
+			//results.putString(FILE_CONTENT, fileContents);
 			
 			resultIntent.putExtras(results);
 			
@@ -346,7 +346,7 @@ public class FileBrowser extends Activity {
 					
 					filePath=currentDirectory.getAbsolutePath();
 
-					fileName=tempFile.getName();
+					//fileName=tempFile.getName();
 					
 					finish();
 				} 

@@ -2,9 +2,11 @@ package edu.nps.jody.GappyAndroidActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 
 import android.app.AlertDialog;
 import android.app.TabActivity;
@@ -20,9 +22,9 @@ import android.telephony.SmsMessage;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -43,28 +45,30 @@ public class GappyAndroidActivity extends TabActivity
 	
 	//Data Members
 		//Gappy Android Data Members
-		private final 	String 		PATH 			= "PATH";//getString(R.string.path);
-		private			 	String		filePath 			= "/";
-		private 				EditText 	path;
-		private 				String		fileName 		= "";
-		private				EditText	file;
-		private				String 		fileContents 	= "";
-		private				TextView fileView;
-		private				Spinner	maxGapSpinner;
-		private				Spinner	featureTypeSpinner;
+		private final 	String 				PATH 			= "PATH";//getString(R.string.path);
+		private			 	String				filePath 			= "/";
+		private 				EditText 			path;
+		private 				String				fileName 		= "";
+		private				EditText			file;
+		private				String 				fileContents 	= "";
+		private				TextView		fileView;
+		private				Spinner			maxGapSpinner;
+		private				Spinner			featureTypeSpinner;
 		private				ToggleButton smsReceiver;
 		private				IntentFilter		smsIntentFilter;
-		private	final 	String 		FILE_PATH = "FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
-		private	final 	int 			GET_NEW_PATH = 0;//R.raw.get_new_path; //=0;
-		private	final 	int 			GET_VIEW_FILE = 1;//R.raw.get_view_file;
-		private	final 	String 		FILE_OPEN ="FILE_OPEN"; // getString(R.string.file_open);
-		private	final 	String		FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
-		private	final 	String		FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
-		private final	String		MAX_GAP = "MAX_GAP";
-		private final	String		FEATURE_TYPE = "FEATURE TYPE";
+		private	final 	String 				FILE_PATH 						= FileBrowser.FILE_PATH;//"FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
+		private	final 	int 					GET_NEW_PATH 			= 0;//R.raw.get_new_path; //=0;
+		private	final 	int 					GET_VIEW_FILE 			= 1;//R.raw.get_view_file;
+		private	final 	String 				FILE_OPEN 						= FileBrowser.FILE_OPEN;//"FILE_OPEN"; // getString(R.string.file_open);
+		//private	final 	String				FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
+		private	final 	String				FILE_ABSOLUTE_PATH	= FileBrowser.FILE_ABSOLUTE_PATH;//"FILE_ABSOLUTE_PATH";
+		private final	String				MAX_GAP 						= "MAX_GAP";
+		private final	String				FEATURE_TYPE			 	= "FEATURE TYPE";
+		private final 	boolean		RETURN_FILE					= true;
+		private final	boolean		RETURN_DIR					= false;
 		
 		//Preference File Data Members
-		private final 	String 		PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
+		private final 	String 				PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
 		private				SharedPreferences 				pref;
 		private				SharedPreferences.Editor 	editor;
 		
@@ -120,37 +124,77 @@ public class GappyAndroidActivity extends TabActivity
     		
     		myTabHost.setCurrentTab(0);
     		
+    		//Create items to display in config tab
     							smsReceiver = (ToggleButton)findViewById(R.id.sms_receiver_toggle);
     		
 					path		= (EditText)findViewById(R.id.path);
 			Button		pathGo		= (Button)findViewById(R.id.path_go);
 			Button		pathBrowse	= (Button)findViewById(R.id.path_browse);
 			
+			maxGapSpinner = (Spinner)findViewById(R.id.max_gap_spinner);
+			
+			featureTypeSpinner = (Spinner)findViewById(R.id.feature_type_spinner);
+			
+			smsReceiver.setOnClickListener(onSMSReceiverClicked);
+			
+			path.setText(filePath);
+			pathGo.setOnClickListener(onPathGoClick);
+			pathBrowse.setOnClickListener(onPathBrowse);
+			
+			maxGapSpinner.setOnItemSelectedListener(onMaxGapSpinnerItemSelected);
+			
+			featureTypeSpinner.setOnItemSelectedListener(onFeatureTypeSpinnerItemSelected);
+			
+			//Create items to display in fileviewer tab
 					file		= (EditText)findViewById(R.id.file);
 			Button		fileGo		= (Button)findViewById(R.id.file_go);
 			Button		fileBrowse	= (Button)findViewById(R.id.file_browse);
 			
 					fileView	= (TextView)findViewById(R.id.file_view);
-			
-					maxGapSpinner = (Spinner)findViewById(R.id.max_gap_spinner);
-					
-					featureTypeSpinner = (Spinner)findViewById(R.id.feature_type_spinner);
-					
-			smsReceiver.setOnClickListener(onSMSReceiverClicked);
-					
-			path.setText(filePath);
-			pathGo.setOnClickListener(onPathGoClick);
-			pathBrowse.setOnClickListener(onPathBrowse);
-			
+						
 			file.setText(fileName);
 			fileGo.setOnClickListener(onFileGoClick);
 			fileBrowse.setOnClickListener(onFileBrowse);
 			
 			fileView.setText(fileContents);
 			
-			maxGapSpinner.setOnItemSelectedListener(onMaxGapSpinnerItemSelected);
+			//Create items to display in help-about tab
+			ImageView helpIcon = (ImageView)findViewById(R.id.help_icon);
+			helpIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_info_details));
 			
-			featureTypeSpinner.setOnItemSelectedListener(onFeatureTypeSpinnerItemSelected);
+			TextView helpAboutLabel = (TextView)findViewById(R.id.help_label);
+			helpAboutLabel.setText("General Help");
+			
+			TextView helpAboutText = (TextView)findViewById(R.id.help_about_text);
+			
+			//Read in the text file (should consolidate this with the fileViewer read method
+			String helpText = "";
+			String nextLine = "";
+			//This is a cheap placeholder until I get an interactive help functioning correctly with javadoc
+			try 
+			{
+				FileReader helpFileReader = new FileReader("README");
+				BufferedReader helpBufferedReader = new BufferedReader(helpFileReader);
+				try
+				{
+					while ((nextLine = helpBufferedReader.readLine()) != null)
+					{
+						helpText.concat(nextLine);
+					}
+					
+				}
+				catch (IOException ioe)
+				{
+					Toast.makeText(this, "IO just failed me.", Toast.LENGTH_LONG);
+				}
+			} 
+			catch (FileNotFoundException e) 
+			{
+				Toast.makeText(this, "Okay, who deleted the help file?", Toast.LENGTH_LONG);
+			}
+			
+			helpAboutText.setText(helpText);
+			
     }
     
     private Spinner.OnItemSelectedListener onFeatureTypeSpinnerItemSelected = new Spinner.OnItemSelectedListener()
@@ -238,7 +282,7 @@ public class GappyAndroidActivity extends TabActivity
 			//fileName = file.getText().toString();
 			hideKeyboard(view);
 			//guiBrowse(false);
-			sendToFileBrowser(false, filePath);
+			sendToFileBrowser(RETURN_DIR, filePath);
 		}
     	
     };
@@ -252,7 +296,7 @@ public class GappyAndroidActivity extends TabActivity
 			hideKeyboard(view);
 			
 			//Want to open a file to view = true
-			sendToFileBrowser(true, filePath);
+			sendToFileBrowser(RETURN_FILE, filePath);
 		}
     	
     };
@@ -308,7 +352,7 @@ public class GappyAndroidActivity extends TabActivity
 				//editor.putString(PATH, filePath);
 				//editor.commit();
 				
-				sendToFileBrowser(true, tempfileName);
+				sendToFileBrowser(RETURN_FILE, tempfileName);
 				return;
 			}
 			else
@@ -409,7 +453,6 @@ public class GappyAndroidActivity extends TabActivity
 	
 	private void sendToFileBrowser(boolean openTheFile, String startFilePath)
 	{
-		
 		Intent		startFileBrowserIntent = new Intent(GappyAndroidActivity.this, FileBrowser.class);
 		
 		Bundle startFileBrowserBundle = new Bundle();

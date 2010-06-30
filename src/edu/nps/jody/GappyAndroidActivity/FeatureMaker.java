@@ -9,8 +9,11 @@ public class FeatureMaker
 		//Static class. No constructors.
 	
 	//Data Members
+		//FIXME This would be better as a static map or array vice hard coding ints here and Strings down in a modified get
 	public static final int FEATURE_OSB = 0;
 	public static final int FEATURE_GB 	= 1;
+	public static final String FEATURE_LABEL_OSB 	= "OSB";
+	public static final String FEATURE_LABEL_GB		= "GB";
 	
 	//Accessors
 		//Static class. No Accessors.
@@ -23,8 +26,8 @@ public class FeatureMaker
 	{
 		HashMap<Integer, String> typeToLabel = new HashMap<Integer, String>();
 		
-		typeToLabel.put(FEATURE_OSB, "OSB");
-		typeToLabel.put(FEATURE_GB, "GB");
+		typeToLabel.put(FEATURE_OSB, FEATURE_LABEL_OSB);
+		typeToLabel.put(FEATURE_GB, FEATURE_LABEL_GB);
 		
 		return typeToLabel.get(featureType);
 	}

@@ -5,5 +5,29 @@ GappyAndroid is a very simple Android app that attempts to:
 - Allow user to define location for all OSB/GB files to be kept
 - Allow user to browse for path as well as directly type in path
 - Provide a very simple text viewer to look at OSB/GB files gathered
-- Show user rudimentary statistics such as number of SMS captured, size of capture files, etc.
--Still working on updating the intents
+
+Config Tab
+- SMSReceiver toggle button turns receiver on and off 
+- Path allows user to type in path and press Go OR use Br button to browse for path.  From Browser, user can Cancel back to previous path or use Select button to select the path
+- Maximum Gap spinner allows user to specifiy the gap size for OSB or GB to use when creating feature sets.
+- Feature type allows user to select OSB (Orthogonal Sparse Bigram) or GB (Gappy Bigram)
+- Config tab created by Jody Grady
+
+
+File Viewer Tab
+- User can select file to view by typing in full path and pressing Go OR by pressing Br button and browsing to file to view
+- File Viewer return appropriate security and file availabliity messages for files selected.
+- File Viewer ceased scrolling once I formatted the TextView to play nice with the Select and Cancel buttons.  I'll fix that on the next update.
+- File viewer created by Jody Grady
+
+Help Tab
+- Displays this README for now.  Will show HTML output of Javadoc when I update this program next.
+
+Supporting Fuctions
+- File Browser created by Jody Grady BUT heavily borrows from ANDDEV.org.  This functionality turned out to NOT be trivial.  File Browser is a separate Activity that can be included in any Andoid app and be triggered by other Activities in an app.  FileBrowser takes a boolean and a String to determin whether to return a string path to a file or a directory (for the boolean).  The provided String tells filebrowser where to begin its display of the file system.  I will also draw in standard icons for popular file formats and for directories on the next update.
+
+- GB and OSB are created using a static GappyBigramMaker created by Jody Grady.  I will expand this library to other features as my thesis continues.
+
+- SMS Manager is a static library created by Jody Grady to process SMS messages caught by SMS Receiver built into Gappy Android
+
+- SMS Receiver is now built into GappyAndroid Activity, but is based on separate SMSReceiver found all over the web.
