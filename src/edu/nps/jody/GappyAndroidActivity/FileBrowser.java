@@ -31,8 +31,7 @@ public class FileBrowser extends Activity {
 		//private		String		fileName = "";
 		private		boolean	openFile;
 		
-		//TODO Get constant values from res files vice hard coded into program
-		public final static String FILE_PATH 				= "FILE_PATH";
+		public final static String FILE_PATH 			= "FILE_PATH";
 		public final static String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
 		//private final String FILE_CONTENT 	= "FILE_CONTENT"; //getString(R.string.file_content);
 		public final static String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";

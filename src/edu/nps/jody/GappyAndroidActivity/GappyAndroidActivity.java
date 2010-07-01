@@ -1,10 +1,12 @@
 package edu.nps.jody.GappyAndroidActivity;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.BroadcastReceiver;
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.view.View;
@@ -32,13 +35,6 @@ import android.widget.TabHost.TabSpec;
 public class GappyAndroidActivity extends TabActivity 
 {
 	//TODO Add actual version number to package
-	/*FIXME Need to ensure that "Go" Button functionality is not completely wrecked after moving FIleBrowser out to its own Activity
-	 * 				- Go Button does not verify existence of directory for path
-	 * 				- Go Button on FileViewer is updating FieView with pseudo path info vice showing file
-	 * 				- Bad path in pathView causes FileBrowser to crash
-	 * 				- Need general purpose path correctness check, that's gonna suck a bit
-	 */
-	//TODO Read finals from res files vice hard coding in
 	
 	//Data Members
 		//Gappy Android Data Members
@@ -166,7 +162,7 @@ public class GappyAndroidActivity extends TabActivity
 			
 			//Read in the text file (should consolidate this with the fileViewer read method
 			String helpText = "";
-			String nextLine = "";
+			/*String nextLine = "";
 			//This is a cheap placeholder until I get an interactive help functioning correctly with javadoc
 			try 
 			{
@@ -182,17 +178,45 @@ public class GappyAndroidActivity extends TabActivity
 				}
 				catch (IOException ioe)
 				{
-					Toast.makeText(this, "IO just failed me.", Toast.LENGTH_LONG);
+					Toast.makeText(getBaseContext(), "IO just failed me.", Toast.LENGTH_LONG);
 				}
 			} 
 			catch (FileNotFoundException e) 
 			{
-				Toast.makeText(this, "Okay, who deleted the help file?", Toast.LENGTH_LONG);
+				Toast.makeText(getBaseContext(), "Okay, who deleted the help file?", Toast.LENGTH_LONG);
+			}*/
+			
+			AssetManager assetManager = getAssets();
+			
+			try
+			{
+				InputStream helpFileInputStream = assetManager.open("README");
+				helpText = readTextFile(helpFileInputStream);
+			}
+			catch (IOException e) 
+			{
+				Toast.makeText(this.getBaseContext(), "IO Error", Toast.LENGTH_LONG);
 			}
 			
 			helpAboutText.setText(helpText);
-			
     }
+    
+    //Coped directly from http://thedevelopersinfo.com/2009/11/17/using-assets-in-android/
+    private String readTextFile(InputStream inputStream) 
+    {
+    		        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    		        byte buf[] = new byte[1024];
+    		        int len;
+    		        try {
+    		            while ((len = inputStream.read(buf)) != -1) {
+    		                outputStream.write(buf, 0, len);
+    		            }
+    		            outputStream.close();
+    		            inputStream.close();
+    		        } catch (IOException e) {
+    		        }
+    		        return outputStream.toString();
+    		    }
     
     private Spinner.OnItemSelectedListener onFeatureTypeSpinnerItemSelected = new Spinner.OnItemSelectedListener()
     {
