@@ -119,14 +119,19 @@
 	 			</TableRow>
 	 		</TableLayout>
 	 	
+ 		<RelativeLayout
+ 			android:id="@+id/file_viewer"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+		>
+	 	
 		<TableLayout
-			android:id="@+id/file_viewer"
+			android:id="@+id/file_viewer_table"
+			android:layout_alignParentTop="true"
 		    android:orientation="vertical"
 		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
+		    android:layout_height="wrap_content"
 		    >
-		 		
-				
 				<TableRow>
 					<TextView
 						android:text="Filename"
@@ -172,25 +177,26 @@
 			    		android:text="File Viewer"
 			    	/>
 			    </TableRow>
-			    
-				<TableRow>	
-					<RelativeLayout
-						android:orientation="vertical"
-						android:layout_weight="1.0"
-					>
-						<TextView
-							android:id="@+id/file_view"
-							android:layout_width="fill_parent"
-							android:layout_height="fill_parent"
-							android:textColor="@color/textview_text_color"
-							android:background="#ffffffff"
-							android:layout_margin="3sp"
-							android:layout_weight="1.0"
-						/>
-					</RelativeLayout>
-				</TableRow>
-			</TableLayout>
-			
+
+		</TableLayout>
+
+		<ScrollView
+				android:id="@+id/file_scroll_view"
+				android:layout_alignParentBottom="true"
+				android:layout_below="@id/file_viewer_table"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:fillViewport="true">
+				<TextView
+					android:id="@+id/file_view"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:textColor="@color/textview_text_color"
+					android:background="#ffffffff"
+				/>
+			</ScrollView>
+
+		</RelativeLayout>
 
 			<LinearLayout
 				android:id="@+id/help_about"
@@ -202,28 +208,37 @@
 						android:orientation="horizontal"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
+						android:background="#ffffffff"
 					>
 						<ImageView
 						android:id="@+id/help_icon"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:background="#ffffffff"
 						/>			
 						<TextView
 							android:id="@+id/help_label"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
 							android:layout_gravity="center_vertical"
+							android:textColor="@color/textview_text_color"
+							android:background="#ffffffff"
+							android:layout_margin="3sp"
 						/>
 					</LinearLayout>
 					
 					<ScrollView
 						android:layout_width="fill_parent"
 						android:layout_height="fill_parent"
+						android:background="#ffffffff"
 					>
 						<TextView
 							android:id="@+id/help_about_text"
 							android:layout_width="fill_parent"
 							android:layout_height="fill_parent"
+							android:textColor="@color/textview_text_color"
+							android:background="#ffffffff"
+							android:layout_margin="3sp"
 						/>
 				</ScrollView>
 			</LinearLayout>

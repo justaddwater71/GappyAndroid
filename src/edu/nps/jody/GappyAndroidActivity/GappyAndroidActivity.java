@@ -49,25 +49,24 @@ public class GappyAndroidActivity extends TabActivity
 		private				Spinner			featureTypeSpinner;
 		private				ToggleButton smsReceiver;
 		private				IntentFilter		smsIntentFilter;
-		private	final 	String 				FILE_PATH 						= FileBrowser.FILE_PATH;//"FILE_PATH";// getString(R.string.file_path);//"FILE_PATH";
+		private	final 	String 				FILE_PATH 						= FileBrowser.FILE_PATH;
 		private	final 	int 					GET_NEW_PATH 			= 0;//R.raw.get_new_path; //=0;
 		private	final 	int 					GET_VIEW_FILE 			= 1;//R.raw.get_view_file;
-		private	final 	String 				FILE_OPEN 						= FileBrowser.FILE_OPEN;//"FILE_OPEN"; // getString(R.string.file_open);
-		//private	final 	String				FILE_CONTENT = "FILE_CONTENT"; //getString(R.string.file_content);
-		private	final 	String				FILE_ABSOLUTE_PATH	= FileBrowser.FILE_ABSOLUTE_PATH;//"FILE_ABSOLUTE_PATH";
+		private	final 	String 				FILE_OPEN 						= FileBrowser.FILE_OPEN;
+		private	final 	String				FILE_ABSOLUTE_PATH	= FileBrowser.FILE_ABSOLUTE_PATH;
 		private final	String				MAX_GAP 						= "MAX_GAP";
 		private final	String				FEATURE_TYPE			 	= "FEATURE TYPE";
 		private final 	boolean		RETURN_FILE					= true;
 		private final	boolean		RETURN_DIR					= false;
 		
 		//Preference File Data Members
-		private final 	String 				PREF_FILE 	= "PREF_FILE";//getString(R.string.pref_file);
+		private final 	String 				PREF_FILE 	= "PREF_FILE";
 		private				SharedPreferences 				pref;
 		private				SharedPreferences.Editor 	editor;
 		
-		//Goofy test setup stuff for embedded receiver class
-		int maxGap;
-		int featureType;
+		//Information to get from interface and pass to SMS_Manager
+		private 	int maxGap;
+		private	int featureType;
 		
 	//Constructors
     /** Called when the activity is first created. */
