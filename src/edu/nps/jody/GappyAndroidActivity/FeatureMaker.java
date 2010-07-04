@@ -1,3 +1,11 @@
+ /** FeatureMaker is a set of static methods and static constants that are used to convert strings of words into 
+  * word features that can be used for natural language processing.
+  * 
+     * @author      Jody Grady <jhgrady@nps.edu>
+     * @version     2010.0703
+     * @since       1.6
+     */
+
 package edu.nps.jody.GappyAndroidActivity;
 
 import java.util.HashMap;
@@ -10,8 +18,8 @@ public class FeatureMaker
 	
 	//Data Members
 		//FIXME This would be better as a static map or array vice hard coding ints here and Strings down in a modified get
-	public static final int FEATURE_OSB = 0;
-	public static final int FEATURE_GB 	= 1;
+	public static final int 		FEATURE_OSB = 0;
+	public static final int 		FEATURE_GB 	= 1;
 	public static final String FEATURE_LABEL_OSB 	= "OSB";
 	public static final String FEATURE_LABEL_GB		= "GB";
 	
@@ -22,6 +30,15 @@ public class FeatureMaker
 		//Static class. No mutators.
 	
 	//Data Methods
+	
+	/**
+     * Convert integer feature type to a label  (OSB, Gappy Bigram, etc).
+     *
+     * Authorative location for integer/label pairs.  Currenty supports Orthgonal Sparse Bigrams (OSB) and Gappy Bigrams (GB).
+     *
+     * @param featureType  	integer value to be converted into a String describing the feature type.
+     * @return 							String describing the feature type associated with the parameter integer value.
+     */
 	public static String featureTypeToLabel(int featureType)
 	{
 		HashMap<Integer, String> typeToLabel = new HashMap<Integer, String>();
@@ -32,6 +49,16 @@ public class FeatureMaker
 		return typeToLabel.get(featureType);
 	}
 	
+	/**
+     * Remove punctuation marks and replace capitalized letters with lowercase letters.
+     *
+     * Remove punctuation marks and change uppercase letters to make focus on words themselves in 
+     * natural language processing vice capitalization and proximity to punctuation.  Also eliminates
+     * non-words such as emoticons and sentence emphasis (ie !!!!!).
+     *
+     * @param textMSG		  	String of text to be cleaned up.
+     * @return 							String of cleaned up text.
+     */
 	public static String cleanUp(String textMSG)
 	{
 		//String cleanedString="";
@@ -47,6 +74,20 @@ public class FeatureMaker
 		
 		return new String(cleanedArray);
 	}
+	
+	/**
+     * Convert a String text message into a set of Orthogonal Sparse Bigrams (OSB).
+     *
+     * Tokenize each word in the provided message.  Pair up individual words into Orthodgonal Sparse Bigrams (OSB).
+     * For instance, "the quick brown fox jumped over" gets converted into into the quick 0, the quick 1, the quick 2, 
+     * the quick 3, for a maximum gap of 4 and continues for "the brown", "the fox" etc.  The build continues for "quick brown"
+     * "quick fox" etc.  OSB is different from Gappy Bigram (GB) in that OSB keeps count of the lesser included distance
+     * between word1 and word2 where GB only pairs the words.
+     *
+     * @param textMSG		  	String of text to be converted.
+     * @param maxGap			Integer that specifies the maximum distance between words to use for creating features.
+     * @return 							String array of word pairs with distance created from the text message parameter.
+     */
 	public static String[] parseOSB(String cleanTextMSG, int maxGap)
 	{
 		//Tokenizer to parse out words (defined as characters surrounded by whitespace)
@@ -102,8 +143,19 @@ public class FeatureMaker
 		return resultArray;
 	}
 	
-	
-	
+	/**
+     * Convert a String text message into a set of Gappy Bigrams.
+     * 
+     * Tokenize each word in the provided message.  Pair up individual words into Orthodgonal Sparse Bigrams (OSB).
+     * For instance, "the quick brown fox jumped over" gets converted into into the quick 0, the quick 1, the quick 2, 
+     * the quick 3, for a maximum gap of 4 and continues for "the brown", "the fox" etc.  The build continues for "quick brown"
+     * "quick fox" etc.  OSB is different from Gappy Bigram (GB) in that OSB keeps count of the lesser included distance
+     * between word1 and word2 where GB only pairs the words.
+     *
+     * @param textMSG		  	String of text to be converted.
+     * @param maxGap			Integer that specifies the maximum distance between words to use for creating features.
+     * @return 							String array of word pairs with distance created from the text message parameter.
+     */
 	public static String[] parseGB(String cleanTextMSG, int maxGap)
 	{
 		//Tokenizer to parse out words (defined as characters surrounded by whitespace)
@@ -160,7 +212,16 @@ public class FeatureMaker
 		return resultArray;
 	}
 	
-	
+	/**
+     * Convert a String text message into a feature set.
+     *
+     * Based on the feature type provided
+     *
+     * @param textMSG		  	String of text to be converted.
+     * @param maxGap			Integer that specifies the maximum distance between words to use for creating features.
+     * @param featureType		integer value representing type of feature to extract from text message (ie OSB or GB).
+     * @return 							String array of word pairs with distance created from the text message and feature type parameters.
+     */
 	public static String[] parse(String cleanTextMSG, int maxGap, int  featureType)
 	{	
 		
@@ -181,11 +242,23 @@ public class FeatureMaker
 				return null;
 			
 		}
-	}
-		
-		
+	}		
 
-	
+	/**
+     * Convert a String text message into a set of Orthogonal Sparse Bigrams (OSB).
+     *
+     * Tokenize each word in the provided message.  Pair up individual words into Orthodgonal Sparse Bigrams (OSB).
+     * For instance, "the quick brown fox jumped over" gets converted into into the quick 0, the quick 1, the quick 2, 
+     * the quick 3, for a maximum gap of 4 and continues for "the brown", "the fox" etc.  The build continues for "quick brown"
+     * "quick fox" etc.  OSB is different from Gappy Bigram (GB) in that OSB keeps count of the lesser included distance
+     * between word1 and word2 where GB only pairs the words.
+     *
+     * @param textMSG		  	String of text to be converted.
+     * @param maxGap			Integer that specifies the maximum distance between words to use for creating features.
+     * @param hashMap			previously built HashMap using the same feature set and maximum gap.
+     * @param featureType		integer value representing type of feature to extract from text message (ie OSB or GB).
+     * @return 							HashMap of features to the integer count of the number of occurrences of that feature in the text message. 
+     */
 	public static HashMap<String, Integer> textToFeatureMap(String textMSG, int maxGap, HashMap<String, Integer> hashMap,int featureType)
 	{
 		String featureArray[] = parse(cleanUp(textMSG), maxGap, featureType);

@@ -1,5 +1,14 @@
-package edu.nps.jody.GappyAndroidActivity;
+ /**SMS_Manager is a set of static methods and static constants that 
+  * are used to convert SMS message into strings of words that are in
+  * turned converted into word features that can be used for natural 
+  * language processing. Depends on FeatureMaker class to function.
+  * 
+     * @author      Jody Grady <jhgrady@nps.edu>
+     * @version     2010.0703
+     * @since       1.6
+     */
 
+package edu.nps.jody.GappyAndroidActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +26,7 @@ public class SMS_Manager
 	//All methods static, so no constructors
 	
 	//Data Members
-	//All methods static, so no data members
+	//No magic constants for SMS manager, so no data members
 	
 	//Accessors
 	//All methods static, so no data members to access
@@ -26,19 +35,22 @@ public class SMS_Manager
 	//All methods static, so no data members to mutate
 	
 	//Methods
-	
-	/*
-	 * Okay, I kludged this. Here's what SHOULD happen:
-	 * 		Get the raw SMS (check)
-	 * 		Separate phone number from SMS body (check)
-	 * 		Use phone number to determine if a hashfile already exists (check)
-	 * 		If exists, load the file into a hashmap (working)
-	 * 		else load minimum hashmap built from pre-determined hashmap
-	 * 		OR
-	 * 		have NO predetermined feature set, just add to text files
-	 * 		OR BOTH
-	 */
-	
+
+	/**
+     * Convert a SMS message into a feature set and write that feature set out to a given path
+     *
+     *This method strips the phone number out of the SMS message, sends the text message to the
+     *class FeatureMaker to have the text processed.  The returning String array is written to a file
+     *containing the phone number, feature type, and gap size.  This method stores the feature
+     *set AS TEXT not as a hash.  That can be accomplished in a separate class as needed to make 
+     *storage more efficient and processing faster.
+     * 
+     * @param SMS					String consisting of one SMS message with phone number still attached.
+     * @param maxGap			Integer that specifies the maximum distance between words to use for creating features.
+     * @ param path					String containing path to the directory where processed SMS message feature set should be written.
+     * @param featureType  	integer value to be converted into a String describing the feature type.
+     * @return 							none.
+     */
 	public static void processSMS(String SMS, int maxGap, String path, int featureType) throws IOException
 	{
 		/*
@@ -70,10 +82,22 @@ public class SMS_Manager
 		//Make HashMap from gappy bigrams of current message
 		HashMap<String, Integer> hashMap = FeatureMaker.textToFeatureMap(textMSG, maxGap, fileToMap(phoneNumber, maxGap, FeatureMaker.featureTypeToLabel(featureType), path), featureType);
 		
-		mapToFile(phoneNumber, maxGap, FeatureMaker.featureTypeToLabel(featureType), hashMap, path);
+		mapToFile(phoneNumber, maxGap, featureType, hashMap, path);
 	}
 	
-	
+	/**
+     * Validate that the given path is a valid directory on the target system.
+     *
+     *This method simply creates a File object from the given String path and ensures that Object
+     *exists within the target system.
+     * 
+     * @param SMS					String consisting of one SMS message with phone number still attached.
+     * @param maxGap			Integer that specifies the maximum distance between words to use for creating features.
+     * @param path					String containing path to the directory where processed SMS message feature set should be written.
+     * @param featureType  	integer value to be converted into a String describing the feature type.
+     * @return 							String path if that path is valid.
+     * @exception						throws FileNotFoundException if the path is not found.
+     */
 	//Path validation belongs in a separate I/O static class.  Need to gen that up.
 	public static String validatePath(String path) throws FileNotFoundException
 	{
@@ -94,9 +118,20 @@ public class SMS_Manager
 		return path;
 	}
 	
-	//I don't like how very UNgeneral the 2G is here.  I need it for 2Gram with the -maxGap to indicate
-	//gappy bigram, but this will trip me up if I expand this program.
-	public static void mapToFile(String phoneNumber, int maxGap, String featureTypeName, HashMap<String, Integer> hashMap, String path) throws IOException
+	/**
+     * Reads a HashMap and convert it into a file
+     *
+     *This method iterates through a HashMap of features and counts to create a text file of those same
+     *features and counts.
+     * 
+     * @param phoneNumber		String representing the phone number pulled from the original SMS message
+     * @param maxGap				Integer that specifies the maximum distance between words to use for creating features.
+     * @param featureType  		integer value to be converted into a String describing the feature type.
+     * @param path						String containing path to the directory where processed SMS message feature set should be written.
+     * @return 								None.
+     * @exception							throws IOException if there is an internal IO issue.
+     */
+	public static void mapToFile(String phoneNumber, int maxGap, int featureType, HashMap<String, Integer> hashMap, String path) throws IOException
 	{	
 		/*
 		 * According to java reference site, using a FileOutputStream with no other
@@ -109,7 +144,7 @@ public class SMS_Manager
 		*/
 		
 		//For required file output in this method
-		File file = new File(path + phoneNumber + "-" + featureTypeName + "-" + maxGap + ".txt");
+		File file = new File(path + phoneNumber + "-" + FeatureMaker.featureTypeToLabel(featureType) + "-" + maxGap + ".txt");
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		PrintWriter printWriter = new PrintWriter(fileOutputStream);
 
@@ -141,6 +176,19 @@ public class SMS_Manager
 		fileOutputStream.close();
 	}
 	
+	/**
+     * Reads a text file and convert it into a HashMap.
+     *
+     *This method iterates through a text file of features and counts to create a HashMap of those same
+     *features and counts.
+     * 
+     * @param phoneNumber		String representing the phone number pulled from the original SMS message
+     * @param maxGap				Integer that specifies the maximum distance between words to use for creating features.
+     * @param featureType  		integer value to be converted into a String describing the feature type.
+     * @param path						String containing path to the directory where processed SMS message feature set should be written.
+     * @return 								None.
+     * @exception							throws IOException if there is an internal IO issue.
+     */
 	public static HashMap<String, Integer> fileToMap(String phoneNumber, int maxGap, String featureTypeName, String path) throws IOException
 	{
 		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
