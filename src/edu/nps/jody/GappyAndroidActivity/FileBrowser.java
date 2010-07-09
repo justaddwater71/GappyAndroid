@@ -1,10 +1,16 @@
+ /**FileBrowser is a support application that receives a String file or directory path
+  * as a starting point.  FileBrowser then provides a GUI to navigate through the 
+  * system.  Depending on the options given, a directory or file is selected and 
+  * the absolute path to that file or directory is returned.
+  * 
+     * @author      Jody Grady <jhgrady@nps.edu>
+     * @version     2010.0703
+     * @since       1.6
+     */
+
 package edu.nps.jody.GappyAndroidActivity;
 
-//import java.io.BufferedReader;
 import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,17 +32,17 @@ public class FileBrowser extends Activity {
 		private		ListView listView;
 		private		TextView browsePath;
 		private		String		filePath; 
-		//private		String		fileContents;
-		//private		EditText 	path;
-		//private		String		fileName = "";
 		private		boolean	openFile;
 		
 		public final static String FILE_PATH 			= "FILE_PATH";
-		public final static String FILE_OPEN 			= "FILE_OPEN"; //getString(R.string.file_open);
-		//private final String FILE_CONTENT 	= "FILE_CONTENT"; //getString(R.string.file_content);
+		public final static String FILE_OPEN 			= "FILE_OPEN";
 		public final static String	FILE_ABSOLUTE_PATH = "FILE_ABSOLUTE_PATH";
 		
-		//Constructor
+	//Constructor
+	/**
+	 * @param savedInstanceState	default bundle, nothing special there
+	 * @return										nothing returned.
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -186,7 +192,16 @@ public class FileBrowser extends Activity {
 	};
     
 
-	
+	/**
+	 * Browse to a directory and return the absolute path to that directory
+	 * 
+	 * This method allows a user to use the Select button to designate a directory
+	 * to return an absolute path.  This method does not all files to be selected
+	 * and returns Toast messages when permissions do not allow or if a file
+	 * is selected instead of a directory.
+	 * 
+	 * @param position		integer indicating position within the listView that has been selected.
+	 */
 	private void browseTo(int position)
 	{	
 		String localFileName = (String)listView.getItemAtPosition(position);
@@ -275,6 +290,15 @@ public class FileBrowser extends Activity {
 		}
 	};
 	
+	/**
+	 * Browse to a file and return the absolute path to that file
+	 * 
+	 * This method allows a user to select e a file and  to return an absolute path to that file.
+	 * This method does not allow directories to be selected (the select button is grayed out)
+	 * and returns Toast messages when permissions do not allow entry into a directory.
+	 * 
+	 * @param position		integer indicating position within the listView that has been selected.
+	 */
 	private void browseOpenTo(int position)
 	{	
 		String localFileName = (String)listView.getItemAtPosition(position);
@@ -319,71 +343,20 @@ public class FileBrowser extends Activity {
 
 		}
 		else
-		{	
-				/*try 
-				{
-					FileReader fileReader = new FileReader(tempFile);
-					BufferedReader bufferedReader = new BufferedReader(fileReader);
-					
-					fileContents="";
-					
-					while ((currentLine = bufferedReader.readLine()) != null)
-					{
-						fileContents = fileContents.concat(currentLine + "\n");
-					}*/
-					
-					Bundle results = new Bundle();
-					
-					//results.putString(FILE_CONTENT, fileContents);
-					results.putString(FILE_ABSOLUTE_PATH, tempFile.getAbsolutePath());
-					
-					Intent resultIntent = new Intent();
-					
-					resultIntent.putExtras(results);
-					
-					setResult(RESULT_OK, resultIntent);
-					
-					filePath=currentDirectory.getAbsolutePath();
-
-					//fileName=tempFile.getName();
-					
-					finish();
-				} 
-				/*catch (FileNotFoundException e) 
-				{
-					OnClickListener fileButtonListener = new OnClickListener()
-					{
-						//@Override
-						public void onClick(DialogInterface arg0, int arg1) 
-						{
-							//Do nothing
-						}
-					};
-					
-					new AlertDialog.Builder(this)
-					.setTitle("Error!")
-					.setMessage("FIle Not Found")
-					.setPositiveButton("OK", fileButtonListener)
-					.show();
-				}
-				catch (IOException i)
-				{
-					OnClickListener fileButtonListener = new OnClickListener()
-					{
-						//@Override
-						public void onClick(DialogInterface arg0, int arg1) 
-						{
-							//Do nothing
-						}
-					};
-					
-					new AlertDialog.Builder(this)
-					.setTitle("Error!")
-					.setMessage("IO Error")
-					.setPositiveButton("OK", fileButtonListener)
-					.show();
-				}
-		}*/
+		{						
+			Bundle results = new Bundle();
+			
+			results.putString(FILE_ABSOLUTE_PATH, tempFile.getAbsolutePath());
+			
+			Intent resultIntent = new Intent();
+			
+			resultIntent.putExtras(results);
+			
+			setResult(RESULT_OK, resultIntent);
+			
+			filePath=currentDirectory.getAbsolutePath();
+			
+			finish();
+		} 
 	}
-    
  }

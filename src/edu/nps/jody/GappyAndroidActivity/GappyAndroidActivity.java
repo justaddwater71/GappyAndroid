@@ -38,7 +38,7 @@ public class GappyAndroidActivity extends TabActivity
 	
 	//Data Members
 		//Gappy Android Data Members
-		private final 	String 				PATH 			= "PATH";//getString(R.string.path);
+		private final 	String 				PATH 			= "PATH";
 		private			 	String				filePath 			= "/";
 		private 				EditText 			path;
 		private 				String				fileName 		= "";
@@ -50,8 +50,8 @@ public class GappyAndroidActivity extends TabActivity
 		private				ToggleButton smsReceiver;
 		private				IntentFilter		smsIntentFilter;
 		private	final 	String 				FILE_PATH 						= FileBrowser.FILE_PATH;
-		private	final 	int 					GET_NEW_PATH 			= 0;//R.raw.get_new_path; //=0;
-		private	final 	int 					GET_VIEW_FILE 			= 1;//R.raw.get_view_file;
+		private	final 	int 					GET_NEW_PATH 			= 0;
+		private	final 	int 					GET_VIEW_FILE 			= 1;
 		private	final 	String 				FILE_OPEN 						= FileBrowser.FILE_OPEN;
 		private	final 	String				FILE_ABSOLUTE_PATH	= FileBrowser.FILE_ABSOLUTE_PATH;
 		private final	String				MAX_GAP 						= "MAX_GAP";
@@ -161,29 +161,6 @@ public class GappyAndroidActivity extends TabActivity
 			
 			//Read in the text file (should consolidate this with the fileViewer read method
 			String helpText = "";
-			/*String nextLine = "";
-			//This is a cheap placeholder until I get an interactive help functioning correctly with javadoc
-			try 
-			{
-				FileReader helpFileReader = new FileReader("README");
-				BufferedReader helpBufferedReader = new BufferedReader(helpFileReader);
-				try
-				{
-					while ((nextLine = helpBufferedReader.readLine()) != null)
-					{
-						helpText.concat(nextLine);
-					}
-					
-				}
-				catch (IOException ioe)
-				{
-					Toast.makeText(getBaseContext(), "IO just failed me.", Toast.LENGTH_LONG);
-				}
-			} 
-			catch (FileNotFoundException e) 
-			{
-				Toast.makeText(getBaseContext(), "Okay, who deleted the help file?", Toast.LENGTH_LONG);
-			}*/
 			
 			AssetManager assetManager = getAssets();
 			
@@ -223,8 +200,6 @@ public class GappyAndroidActivity extends TabActivity
 		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 		{
 			//Get the String value of the item selected in the spinner
-			
-			//Put this into preferences to be read by other classes for processing SMS messages
 				featureType = position;
 				editor.putInt(FEATURE_TYPE, position);
 				editor.commit();
@@ -236,7 +211,6 @@ public class GappyAndroidActivity extends TabActivity
 			// Do nothing
 			return;
 		}
-    	
     };
     
     private Spinner.OnItemSelectedListener onMaxGapSpinnerItemSelected = new Spinner.OnItemSelectedListener()
@@ -251,7 +225,6 @@ public class GappyAndroidActivity extends TabActivity
 			}
 			else
 			{
-				//int spinnerSelection = Integer.getInteger(selected);
 				int spinnerSelection;
 				
 				spinnerSelection = Integer.parseInt(selected);
@@ -277,7 +250,6 @@ public class GappyAndroidActivity extends TabActivity
 		public void onClick(View v) 
 		{
 			if(smsReceiver.isChecked())
-			//if (smsReceiver.isEnabled())
 			{
 				registerReceiver(SMSBroadcastReceiver, smsIntentFilter);
 			}
@@ -299,9 +271,7 @@ public class GappyAndroidActivity extends TabActivity
 			filePath = path.getText().toString();
 			editor.putString(PATH, filePath);
 			editor.commit();
-			//fileName = file.getText().toString();
 			hideKeyboard(view);
-			//guiBrowse(false);
 			sendToFileBrowser(RETURN_DIR, filePath);
 		}
     	
@@ -326,14 +296,10 @@ public class GappyAndroidActivity extends TabActivity
 		public void onClick(View v) 
 		{	
 			String tempFilePath = path.getText().toString();
-			/*editor.putString(PATH, filePath);
-			editor.commit();
-			fileName = file.getText().toString();*/
 			File tempFile = new File(tempFilePath);
 			
 			hideKeyboard(path);
             
-			//fileView.setText(filePath + "/" + fileName);
 			if (tempFile.isDirectory())
 			{
 				filePath = tempFilePath;
@@ -346,32 +312,22 @@ public class GappyAndroidActivity extends TabActivity
 				Toast.makeText(getBaseContext(), "That is not a directory", Toast.LENGTH_LONG);
 			}
 		}
-    	
     };
     
     private Button.OnClickListener onFileGoClick = new Button.OnClickListener()
     {
 		public void onClick(View v) 
 		{
-			//String tempfilePath = path.getText().toString();
-			//editor.putString(PATH, filePath);
-			//editor.commit();
 			String tempfileName = file.getText().toString();
 			
 			hideKeyboard(file);
 
-			//fileView.setText(filePath + "/" + fileName);
-			
 			String currentLine ="";
 			
 			File tempFile = new File(tempfileName);//new File(tempfilePath + "/" + tempfileName);
 			
 			if (tempFile.isDirectory())
 			{
-				//filePath = tempfilePath;
-				//editor.putString(PATH, filePath);
-				//editor.commit();
-				
 				sendToFileBrowser(RETURN_FILE, tempfileName);
 				return;
 			}
@@ -379,14 +335,7 @@ public class GappyAndroidActivity extends TabActivity
 			{
 				if (tempFile.canRead())
 				{
-					//filePath = path.getText().toString();
-					//editor.putString(PATH, filePath);
-					//editor.commit();
 					fileName = file.getText().toString();
-					
-					//File[] files = tempFile.listFiles();
-					//currentDirectory = tempFile;
-					//browsePath.setText(currentDirectory.getAbsolutePath());
 					
 					FileReader fileReader;
 					try 
@@ -407,55 +356,19 @@ public class GappyAndroidActivity extends TabActivity
 					catch (FileNotFoundException e) 
 					{
 						Toast.makeText(getBaseContext(), "File does not exist", Toast.LENGTH_LONG);
-					} catch (IOException e) {
+					} 
+					catch (IOException e) 
+					{
 						Toast.makeText(getBaseContext(), "I/O Error.  Please try later.", Toast.LENGTH_LONG);
 					}
-					
-					
-					/*if (files == null)
-					{
-						listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, dropPath(files)));
-					}
-					else
-					{
-						listView.setAdapter(new ArrayAdapter<String>(this, R.layout.file_row, dropPath(files)));
-					}*/
 				}
 				else
 				{
 					Toast.makeText(getBaseContext(), "Permission Denied", Toast.LENGTH_LONG);
-					
-					/*OnClickListener fileButtonListener = new OnClickListener()
-					{
-						//@Override
-						public void onClick(DialogInterface arg0, int arg1) 
-						{
-							//Do nothing
-						}
-					};
-					
-					new AlertDialog.Builder(this)
-						.setTitle("Security Notice")
-						.setMessage("Permission Denied")
-						.setPositiveButton("OK", fileButtonListener)
-						.show();*/
 				}
 
 			}
-			/*else
-			{	
-					
-						FileReader fileReader = new FileReader(tempFile);
-						BufferedReader bufferedReader = new BufferedReader(fileReader);
-						
-						fileContents="";
-						
-						while ((currentLine = bufferedReader.readLine()) != null)
-						{
-							fileContents = fileContents.concat(currentLine + "\n");
-						}
-			}*/
-					
+		
 		}
     	
     };
@@ -517,15 +430,17 @@ public class GappyAndroidActivity extends TabActivity
 	            break;
 	            
 	        case GET_VIEW_FILE:
-	            if (resultCode == RESULT_CANCELED){
+	            if (resultCode == RESULT_CANCELED)
+	            {
 	                //Do nothing
 	            } 
-	            else {
+	            else 
+	            {
 	                Bundle result = data.getExtras();
 	                
-	               // fileContents = result.getString(FILE_CONTENT);
 	               File tempFile = new File(result.getString(FILE_ABSOLUTE_PATH));
 	               String currentLine;
+	               
 	                try 
 					{
 						FileReader fileReader = new FileReader(tempFile);
@@ -606,11 +521,6 @@ public class GappyAndroidActivity extends TabActivity
 	                str += msgs[i].getMessageBody().toString();
 	                str += "\n";      
 	                
-	                //SharedPreferences pref = context.getSharedPreferences("PREF_FILE", 0);
-	                //String path = pref.getString("FILE_PATH", "/sdcard");
-	                //int featureType = pref.getInt("FEATURE_TYPE", FeatureMaker.FEATURE_OSB);
-	                //int maxGap = pref.getInt("MAX_GAP", 4);
-	                
 	                try
 	                {
 	                	SMS_Manager.processSMS(str, maxGap, filePath, featureType);
@@ -619,15 +529,10 @@ public class GappyAndroidActivity extends TabActivity
 	                {
 	                	Toast.makeText(context, "Cannot write file to current directory.", Toast.LENGTH_LONG).show();
 	                }
-	            
-	           //componentName =  intent.getComponent().toShortString();
-	            //---display the new SMS message---
-	            //Toast.makeText(context, componentName, Toast.LENGTH_LONG).show();
+
 	            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-	    	   }
+	            }
 	        }                         
 	    }
-		
 	};
-	
 }
