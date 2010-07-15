@@ -61,6 +61,7 @@ public class FeatureMaker
      */
 	public static String cleanUp(String textMSG)
 	{
+		//TODO Need to generalize this for caps on/off, punctuation on/off, <s>/</s> on/off
 		//String cleanedString="";
 		char	cleanedArray[];
 		
@@ -281,6 +282,73 @@ public class FeatureMaker
 		}
 		
 		return hashMap;
+	}
+	
+	/**
+	 * Preprocess incoming text based on intended feature set.
+	 * 
+	 * Process the incoming text based on chosen features set, namely, whether to allow capitalization,
+	 * punctuation, unknown words, sentence boundaries, and stemming.  The choices of feature set
+	 * impact the size of the required files.  Specifically, capitalization reduces the required
+	 * feature set files (for reference, not for each text message),  removing punctuation reduces the 
+	 * required file size, dropping unknown text vice substituting with the <UNK> marker reduces the
+	 * required file size, adding SentenceBoundaries increases the required file size, and using stemming
+	 * decreases the required file size.
+	 * 
+	 * @param text										Incoming text message to be processed
+	 * @param removePunctuation			Remove all capitalization if set to true, leave capitalization in text if false.
+	 * @param makeLowerCase					Convert entire message to lower case letters if true.  Leave capitals alone if false.
+	 * @param dropUnknownWord				Remove unknown word if set to true.  Convert unknown words to <UNK> marker if false.
+	 * @param dropUnknownGram			Remove unknown grams if set to true.  Convert unknown grams to <UNKGRAM> marker if false.
+	 * @param addSentenceBoundaries	Find sentence boundaries and mark with <s> (start) and </s> (end) if true. Do not find sentence boundaries if false.
+	 * @param doStemming						Removed common word suffixes if true.  Leave suffixes in place if false
+	 * @return
+	 */
+	public static String preProcessText(String text, boolean removePunctuation, boolean makeLowerCase, boolean dropUnknownWord, boolean addSentenceBoundaries, boolean doStemming)
+	{
+		String processedText = text;
+		
+		//Order of applying this processing IS significant.  
+		
+		//If we add sentence boundaries before stemming, we might confuse the stemming routine.
+		if (doStemming)
+		{
+			processedText = wordStemming(processedText);
+		}
+		//If we strip the punctuation BEFORE doing sentence tokenizer, the sentence tokenizer won't be happy.  
+		if (addSentenceBoundaries)
+		{
+			processedText = sentenceTokenizer(processedText);
+		}
+		
+		//If we're going to strip capitalization, need to do that BEFORE putting in the <UNK> grams
+		//so we don't munge the <UNK> tag
+		if (makeLowerCase)
+		{
+			processedText = processedText.toLowerCase();
+		}
+		
+		if (dropUnknownWord)
+		{
+			processedText = wordMembershipCheck(wordMembershipCheck.DROP_WORD);
+		}
+		else
+		{
+			processedText = wordMembershipCheck(wordMembershipCheck.TAG_UNK);
+		}
+		
+/*		if (dropUnknownGram)
+		{
+			processedText = gramMembershipCheck(gramMembershipCheck.DROP_GRAM);
+		}
+		else
+		{
+			processedText = gramMembershipCheck(gramMembershipCheck.TAG_UNKGRAM);
+		}*/
+		
+		if ()
+		
+		return processedText;
 	}
 	
 }
