@@ -8,8 +8,25 @@
 
 package edu.nps.jody.GappyAndroidActivity;
 
+import net.didion.jwnl.*;
+import net.didion.jwnl.dictionary.Dictionary;
+import opennlp.tools.coref.mention.JWNLDictionary;
+import opennlp.tools.sentdetect.*;
+import opennlp.maxent.*;
+import opennlp.maxent.io.BinaryGISModelReader;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 public class FeatureMaker 
 {
@@ -18,10 +35,23 @@ public class FeatureMaker
 	
 	//Data Members
 		//FIXME This would be better as a static map or array vice hard coding ints here and Strings down in a modified get
-	public static final int 		FEATURE_OSB = 0;
-	public static final int 		FEATURE_GB 	= 1;
-	public static final String FEATURE_LABEL_OSB 	= "OSB";
-	public static final String FEATURE_LABEL_GB		= "GB";
+	public static final int 			FEATURE_OSB 						= 0;
+	public static final int 			FEATURE_GB 							= 1;
+	public static final String 		FEATURE_LABEL_OSB 			= "OSB";
+	public static final String 		FEATURE_LABEL_GB				= "GB";
+	public static final String 		MODEL_FILE 							= "EnglishSD.bin.gz";
+	public static final String 		LEMMA_DICTIONARY_FILE 	= "lemmaDictionaryFIle.bin";
+	public static final String 		LEMMA_DICTIONARY_PATH	= "";//TODO Figure out this remote WordNET thing
+	public static final int			NO_STEMMING 						= 0;
+	public static final int			PORTER_STEMMING				=1;
+	public static final int			YASS_STEMMING					=2;
+	public static final int			LEMMATIZE							=3;
+	public static final char		QUESTION								= '?';
+	public static final char		EXCLAMATION						= '!';
+	public static final char		SINGLE_QUOTE						= '\'';
+	public static final char		LEFT_ANGLE_BRACKET		= '<';
+	public static enum				QUESTION_EXCLAMATION	{QUESTION, EXCLAMATION};			
+	
 	
 	//Accessors
 		//Static class. No Accessors.
@@ -160,6 +190,7 @@ public class FeatureMaker
 	public static String[] parseGB(String cleanTextMSG, int maxGap)
 	{
 		//Tokenizer to parse out words (defined as characters surrounded by whitespace)
+		//TODO Ensure this works for case of included punctuation.
 		StringTokenizer tokenizer = new StringTokenizer(cleanTextMSG);
 		
 		//Determine total number of words in message to size words array
@@ -225,7 +256,7 @@ public class FeatureMaker
      */
 	public static String[] parse(String cleanTextMSG, int maxGap, int  featureType)
 	{	
-		
+		//FIXME text should be tokenized HERE, not in parseOSB and parseGB
 		switch (featureType)
 		{
 			case FEATURE_OSB: //=0
@@ -245,6 +276,125 @@ public class FeatureMaker
 		}
 	}		
 
+	public static String[] tokenize(String text)
+	{
+		char[] textArray = text.toCharArray();
+		
+		int textArrayLength = textArray.length;
+		
+		Vector<String> tokenVector = new Vector<String>();
+		
+		String currentToken = "";
+		
+		char currentChar = ' ';
+		
+		for (int i =0; i < textArrayLength; i++)
+		{
+			currentChar = textArray[i];
+			
+			//If this character is outiside standard Unicode, ignore it.
+			//TODO the spec on this is Unicode, ensure that means UTF8 vice UTF16
+			 if (Character.isDefined(currentChar))
+			{
+				if (Character.isLetter(currentChar))
+				{
+					currentToken.concat(Character.toString(currentChar));
+				}
+				else if (Character.isDigit(currentChar))
+				{
+					currentToken.concat(Character.toString(currentChar));
+				}
+				else if (Character.isWhitespace(currentChar))
+				{
+					tokenVector.add(currentToken);
+					currentToken = "";
+				}
+				//Treat ! and ? as definitive end of sentence punctuation, and therefore separate tokens
+				else if (currentChar == '!' || currentChar == '?')
+				{
+					tokenVector.add(currentToken);
+					currentToken = Character.toString(currentChar);
+					tokenVector.add(currentToken);
+					currentToken = "";
+				}
+				//FIXME The array count end and character searches are TOO CLUNKY.  THINK THIS OUT!!!
+				//Deal with possibility that '<' leads into <S>, </S>, or <UNK>
+				else if (currentChar == '<')
+				{
+						if ((i+2) < textArrayLength && textArray[i+1] == 'S' && textArray[i+2] == '>')
+						{
+							tokenVector.add(currentToken);
+							currentToken = "<S>";
+							tokenVector.add(currentToken);
+							currentToken= "";
+							i += 2;
+						}
+						else if ((i+3) < textArrayLength && textArray[i+1] == '/' && textArray[i+2] == 'S' && textArray[i+3] == '>')
+						{
+							tokenVector.add(currentToken);
+							currentToken = "</S>";
+							tokenVector.add(currentToken);
+							currentToken= "";
+							i += 3;
+						}
+						else if ((i+4) < textArrayLength && textArray[i+1] == 'U' && textArray[i+2] == 'N' && textArray[i+3] == 'K' && textArray[i+4] =='>')
+						{
+							tokenVector.add(currentToken);
+							currentToken = "<UNK>";
+							tokenVector.add(currentToken);
+							currentToken= "";
+							i += 4;				
+						}
+						else
+						{
+							currentToken.concat(">");
+						}
+					}
+				}
+			 	//Web1T README says that 's, is a separate word, n't is a separate word, soooo, 'd would be a separate word, too?
+				 else if (currentChar == '\'')
+				 {
+					 if ((i+1) < textArrayLength && (textArray[i+1] == 't'))
+					 {
+						 if (((i-1) > -1)  && textArray[i=1] == 'n')
+						 {
+							 tokenVector.add(currentToken);
+							 currentToken = "'t";
+							 tokenVector.add(currentToken);
+							 currentToken = "";
+							 i += 1;
+						 }
+						 //FIXME Seems like there should be an else after a 't without a preceding n
+					 }
+					 else if ((i+1) < textArrayLength && (textArray[i+1] == 'm' || textArray[i+1] =='s'))
+					 {
+						 currentToken = currentChar + Character.toString(textArray[i+1]);
+						 tokenVector.add(currentToken);
+						 currentToken="";
+						 i += 1;
+					 }
+					 else if ((i+2) < textArrayLength && (textArray[i+1] == 'v' && textArray[i+2] == 'e') || (textArray[i+1] == 'l' && textArray[i+2] == 'l') || (textArray[i+1] == 'r' && textArray[i+2] == 'e'))
+					 {
+						 tokenVector.add(currentToken);
+						 currentToken = currentChar + Character.toString(textArray[i+1]) + Character.toString(textArray[i+2]);
+						 tokenVector.add(currentToken);
+						 currentToken="";
+						 i += 2;
+					 }
+				 }
+				 else
+				 {
+					//Treat this like a char quote or embedded quote
+					 tokenVector.add(currentToken);
+					 currentToken = Character.toString(SINGLE_QUOTE);
+					 tokenVector.add(currentToken);
+					 currentToken="";
+				 }
+			}
+		
+		return (String[])tokenVector.toArray();
+	}
+	
 	/**
      * Convert a String text message into a set of Orthogonal Sparse Bigrams (OSB).
      *
@@ -303,8 +453,9 @@ public class FeatureMaker
 	 * @param addSentenceBoundaries	Find sentence boundaries and mark with <s> (start) and </s> (end) if true. Do not find sentence boundaries if false.
 	 * @param doStemming						Removed common word suffixes if true.  Leave suffixes in place if false
 	 * @return
+	 * @throws IOException 
 	 */
-	public static String preProcessText(String text, boolean removePunctuation, boolean makeLowerCase, boolean dropUnknownWord, boolean addSentenceBoundaries, boolean doStemming)
+	public static String preProcessText(String text, boolean removePunctuation, boolean makeLowerCase, boolean dropUnknownWord, boolean addSentenceBoundaries, boolean doStemming) throws IOException
 	{
 		String processedText = text;
 		
@@ -330,27 +481,107 @@ public class FeatureMaker
 		
 		if (dropUnknownWord)
 		{
-			processedText = wordMembershipCheck(wordMembershipCheck.DROP_WORD);
+			processedText = MembershipCheck.check(MembershipCheck.DROP_WORD, processedText);
 		}
 		else
 		{
-			processedText = wordMembershipCheck(wordMembershipCheck.TAG_UNK);
+			processedText = MembershipCheck.check(MembershipCheck.TAG_UNK, processedText);
 		}
 		
-/*		if (dropUnknownGram)
-		{
-			processedText = gramMembershipCheck(gramMembershipCheck.DROP_GRAM);
-		}
-		else
-		{
-			processedText = gramMembershipCheck(gramMembershipCheck.TAG_UNKGRAM);
-		}*/
-		
-		if ()
+		if (removePunctuation)
+			{
+				processedText = noPunctuation(processedText);
+			}
 		
 		return processedText;
 	}
 	
+	//Much of this code borrowed from Wicked Cool Java (No Starch Press)	Copyright (C) 2005 Brian D. Eubanks
+	private static String lemmatize(String text) throws JWNLException, IOException 
+	{
+		//FIXME What happens when punctuation is not stripped and the text is broken on whitespace only?  We need to deal with splitting text that has punctuation in it.
+		JWNL.initialize(new FileInputStream(new File(LEMMA_DICTIONARY_FILE)));
+		
+		String postagText = posTag(text);
+		
+		String textArray[] = text.split(" ");
+		
+		String lemmaArray[];
+		
+		String lemmas = "";
+		//FIXME JWNL.initizalize and JWNLDictionary should not necesary reference the same file.  Sort this out!
+		
+		JWNLDictionary dictionary = new JWNLDictionary(LEMMA_DICTIONARY_FILE);
+		
+		int textArraySize = textArray.length;
+		
+		for (int i=0; i < textArraySize; i++)
+		{
+			lemmaArray = null;
+			
+			lemmaArray = dictionary.getLemmas(textArray[i], "VERB");
+			
+			lemmas.concat(lemmaArray[0] + " ");
+		}
+		
+		return lemmas;
+	}
+
+	private static String posTag(String text)
+	{
+		return text;
+	}
+	
+	public static String noPunctuation(String text)
+	{	
+		int 		textLength = text.length();
+		char[] textArray = text.toCharArray();
+		char[] processedArray = new char[textLength];
+		int 		processedIndex = 0;
+		
+		for (int i=0;i < textLength; i++)
+		{
+			if (Character.isLetterOrDigit(textArray[i]))
+			{
+				processedArray[processedIndex] = textArray[i];
+				processedIndex++;
+			}
+		}
+						
+		return new String(processedArray);
+	}
+	
+	public static String sentenceTokenizer(String text) throws IOException
+	{
+		String processedText = text;
+		
+			SentenceDetectorME sbd = new SentenceDetectorME(new BinaryGISModelReader(new File(MODEL_FILE)).getModel());
+			
+			String sentenceArray[] = sbd.sentDetect(text);
+			
+			int sentenceArrayLength = sentenceArray.length;
+			
+			for (int i=0; i < sentenceArrayLength; i++)
+			{
+				processedText.concat("<S>");
+				processedText.concat(sentenceArray[i]);
+				processedText.concat("</S>");
+			}
+
+		return processedText;
+	}
+	
+	//FIXME Implement word stemming method
+	public static String wordStemming(String text)
+	{
+		return text;
+	}
+	
+	public static boolean charInEnum(char currentChar, char[] charArray)
+	{
+		//FIXME should be a list of char not a list of char[].  Something is still wrong here.
+		return Arrays.asList(charArray).contains(currentChar);
+	}
 }
 
 
