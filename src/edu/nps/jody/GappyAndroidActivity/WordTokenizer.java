@@ -1,11 +1,13 @@
 package edu.nps.jody.GappyAndroidActivity;
 
-import java.util.List;
+import java.util.Vector;
 
 public class WordTokenizer 
 {
 	//Data Members
-	List<String> tokenList;
+	String token = "";
+	int i = 0; //This is a TERRIBLE way to handle the index, but necessary for now.
+	Vector<String> tokenList = new Vector<String>();
 	int stateTable[][];
 	
 	//Constants
@@ -33,130 +35,24 @@ public class WordTokenizer
 	}
 	
 	//Methods
-	public List<String> wordTokenizeText(String text)
+	public Vector<String> wordTokenizeText(String text)
 	{
+		//Ensure a finishing character is present
+		text = text.concat("\n");
+		
 		int state=0;
 		
 		char charArray[] = text.toCharArray();
 		
-		String token = "";
-		
 		String currentChar;
 		
-		int buffer;
-		
-		for(int i = 0; i < charArray.length; i ++)
+		for( i = 0; i < charArray.length; i ++)
 		{
 			currentChar = Character.toString(charArray[i]);
+			
 			state = dfa(state, charArray[i]);
 			
-			if (state < 0)
-			{
-				switch(state)
-				{
-				case (ADD_TOKEN_WITH_CHECK_ADD_CURRENT_CHAR):
-					addTokenWithCheck(token);
-					token = currentChar;;
-					addTokenNoCheck(token);
-					token = "";
-					state =0;
-					break;
-				
-				case (ADD_TOKEN_WITH_CHECK_BACK_0):
-					buffer = 0;
-					bufferTokenWithCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_WITH_CHECK_BACK_1):
-					buffer = 1;
-					bufferTokenWithCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_WITH_CHECK_BACK_2):
-					buffer = 2;
-					bufferTokenWithCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_WITH_CHECK_BACK_3):
-					buffer = 3;
-					bufferTokenWithCheck(token, buffer);
-					i 			-= 	buffer;
-					i 			-= 	3;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_WITH_CHECK_BACK_4):
-					buffer = 4;
-					bufferTokenWithCheck(token, buffer);
-					i 			-= 	buffer;
-					i 			-= 	4;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_NO_CHECK_ADD_CURRENT_CHAR):
-					addTokenNoCheck(token);
-					token = currentChar;;
-					addTokenNoCheck(token);
-					token = "";
-					state =0;
-				break;
-				
-				case (ADD_TOKEN_NO_CHECK_BACK_0):
-					buffer 	= 0;
-					bufferTokenNoCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_NO_CHECK_BACK_1):
-					buffer 	= 1;
-					bufferTokenNoCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_NO_CHECK_BACK_2):
-					buffer 	= 2;
-					bufferTokenNoCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_NO_CHECK_BACK_3):
-					buffer 	= 3;
-					bufferTokenNoCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-					
-				case (ADD_TOKEN_NO_CHECK_BACK_4):
-					buffer 	= 4;
-					bufferTokenNoCheck(token, buffer);
-					i 			-= 	buffer;
-					token	=		"";
-					state	= 	0;
-					break;
-				}
-			}
-			else
-			{
-				token.concat(currentChar);
-			}
+			state = buildTokens(state, currentChar);
 		}
 		
 		return tokenList;
@@ -166,37 +62,170 @@ public class WordTokenizer
 	{
 		int tokenLength;
 		
-		if ((tokenLength = token.length()) > 0)
-		{
-			if (MARKERS.indexOf(token.substring(tokenLength-1)) > -1)
-			{
-				addTokenWithCheck(token.substring(0, tokenLength-2));
+			if ((tokenLength = token.length()) > 1 && MARKERS.indexOf(token.substring(tokenLength-1)) > -1)
+			{	
+				addTokenWithCheck(token.substring(0, tokenLength-1));
 				tokenList.add(token.substring(tokenLength-1));
 			}
 			else
 			{
-				tokenList.add(token);	
+				if (tokenLength > 0)
+				{
+					tokenList.add(token);	
+				}
+				
 			}
-		}
+		
 	}
 	
 	public void bufferTokenNoCheck(String token, int buffer)
 	{
+		if(buffer > 0)  //watch this number compared to beffer-1 or buffer
+		{
 		int length = token.length();
-		addTokenWithCheck(token.substring(0, length - (buffer+1)));
-		addTokenNoCheck(token.substring(length - buffer));
+		addTokenNoCheck(token.substring(0, length - (buffer-1)));
+		}
+		else
+		{
+			addTokenNoCheck(token);
+		}
 	}
 	
 	public void bufferTokenWithCheck(String token, int buffer)
 	{
+		if(buffer > 0)//watch this number compared to beffer-1 or buffer
+		{
 		int length = token.length();
-		addTokenWithCheck(token.substring(0, length - (buffer)));	
-		tokenList.add(token.substring(length - buffer, length - buffer + 1));
+		addTokenWithCheck(token.substring(0, length - (buffer-1)));
+		}
+		else
+		{
+			addTokenWithCheck(token);
+		}
 	}
 	
 	public void addTokenNoCheck(String token)
 	{
-		tokenList.add(token);
+		int tokenLength = token.length();
+		
+		if (tokenLength > 0)
+		{
+			tokenList.add(token);
+		}
+		
+	}
+	
+	public  int buildTokens(int state, String currentChar)
+	{
+		int buffer;
+		
+		if (state < 0)
+		{
+			switch(state)
+			{
+			case (ADD_TOKEN_WITH_CHECK_ADD_CURRENT_CHAR):
+				addTokenWithCheck(token);
+				token = currentChar;;
+				addTokenNoCheck(token);
+				token = "";
+				state =0;
+				break;
+			
+			case (ADD_TOKEN_WITH_CHECK_BACK_0):
+				buffer = 0;
+				bufferTokenWithCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_WITH_CHECK_BACK_1):
+				buffer = 1;
+				bufferTokenWithCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_WITH_CHECK_BACK_2):
+				buffer = 2;
+				bufferTokenWithCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_WITH_CHECK_BACK_3):
+				buffer = 3;
+				bufferTokenWithCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_WITH_CHECK_BACK_4):
+				buffer = 4;
+				bufferTokenWithCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_NO_CHECK_ADD_CURRENT_CHAR):
+				addTokenNoCheck(token);
+				token = currentChar;;
+				addTokenNoCheck(token);
+				token = "";
+				state =0;
+			break;
+			
+			case (ADD_TOKEN_NO_CHECK_BACK_0):
+				buffer 	= 0;
+				bufferTokenNoCheck(token, buffer);
+				i 			-= 	buffer;		//Just an experiment
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_NO_CHECK_BACK_1):
+				buffer 	= 1;
+				bufferTokenNoCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_NO_CHECK_BACK_2):
+				buffer 	= 2;
+				bufferTokenNoCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_NO_CHECK_BACK_3):
+				buffer 	= 3;
+				bufferTokenNoCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+				
+			case (ADD_TOKEN_NO_CHECK_BACK_4):
+				buffer 	= 4;
+				bufferTokenNoCheck(token, buffer);
+				i 			-= 	buffer;
+				token	=		"";
+				state	= 	0;
+				break;
+			}
+		}
+		else
+		{
+			token= token.concat(currentChar);
+		}
+		
+		return state;
 	}
 	
 	public int dfa(int state, char currentChar)
